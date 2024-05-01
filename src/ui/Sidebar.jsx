@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import UserInfo from "./UserInfo";
+// import UserInfo from "./UserInfo";
 import SideNav from "./SideNav";
 
 const StyledSidebar = styled.aside`
@@ -11,7 +11,7 @@ const StyledSidebar = styled.aside`
 function Sidebar() {
   return (
     <StyledSidebar>
-      <UserInfo />
+      {/* <UserInfo /> */}
       <SideNav />
     </StyledSidebar>
   );

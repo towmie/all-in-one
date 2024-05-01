@@ -32,7 +32,7 @@ function SideNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavItem>
+          <StyledNavItem currentState={showDropdown}>
             <FlexWrapper>
               <MdAttachMoney />
               <span>Finance</span>

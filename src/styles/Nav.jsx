@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const NavList = styled.ul`
@@ -16,6 +16,7 @@ export const StyledNavItem = styled.div`
   position: relative;
   background-color: var(--color-grey-50);
   border-radius: var(--border-radius-lg);
+  border: 2px solid transparent;
 
   color: var(--color-grey-600);
   font-size: 1.6rem;
@@ -24,10 +25,16 @@ export const StyledNavItem = styled.div`
   transition: all 0.3s;
   cursor: pointer;
 
+  ${(props) =>
+    props.currentState &&
+    css`
+      border: 2px solid var(--color-brand-600);
+      box-shadow: var(--shadow-md);
+    `}
+
   &:hover {
     color: var(--color-grey-800);
     background-color: var(--color-grey-100);
-    border-radius: var(--border-radius-sm);
   }
 
   & svg {
@@ -65,7 +72,6 @@ export const StyledNavLink = styled(NavLink)`
   &.active:visited {
     color: var(--color-grey-800);
     background-color: var(--color-grey-100);
-    border-radius: var(--border-radius-sm);
   }
 
   & svg {
@@ -89,8 +95,10 @@ export const SubNavList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  background-color: var(--color-grey-200);
+  background-color: var(--color-brand-50);
   border-radius: var(--border-radius-lg);
+
+  /* border: 2px solid var(--color-brand-600); */
 `;
 
 export const StyledSubNavLink = styled(NavLink)`
@@ -100,10 +108,10 @@ export const StyledSubNavLink = styled(NavLink)`
     align-items: center;
     gap: 1rem;
 
-    color: var(--color-grey-600);
+    color: var(--color-brand-800);
     font-size: 1.4rem;
     font-weight: 500;
-    padding: 1rem 1.8rem;
+    padding: 1.2rem 2.4rem;
     transition: all 0.3s;
   }
 
@@ -114,13 +122,12 @@ export const StyledSubNavLink = styled(NavLink)`
   &.active:visited {
     color: var(--color-grey-800);
     background-color: var(--color-grey-100);
-    border-radius: var(--border-radius-sm);
   }
 
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--color-grey-400);
+    color: var(--color-brand-800);
     transition: all 0.3s;
   }
 
