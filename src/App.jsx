@@ -5,6 +5,9 @@ import GlobalStyles from "./styles/GlobalStyles";
 import AppLyout from "./ui/AppLyout";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
+import Crypto from "./pages/Crypto";
+import CoinsList from "./features/crypto/CoinsList";
+import IncomesList from "./features/crypto/IncomesList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +16,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,6 +27,10 @@ function App() {
           <Route element={<AppLyout />}>
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="crypto" element={<Crypto />}>
+              <Route path="coins" element={<CoinsList />} />
+              <Route path="incomes" element={<IncomesList />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -4,7 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { HiOutlineHome } from "react-icons/hi";
 import { IoBriefcaseOutline } from "react-icons/io5";
 import { MdAttachMoney } from "react-icons/md";
-import { NavList, StyledNavItem, StyledNavLink } from "../styles/Nav";
+import { NavList, StyledNavItem, StyledNavLink } from "../styles/NavStyles";
 import SubMenuNav from "./SubMenuNav";
 import ToggleButton from "./ToggleButton";
 import styled from "styled-components";
@@ -32,7 +32,7 @@ function SideNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavItem currentState={showDropdown}>
+          <StyledNavItem currentstate={showDropdown.toString()}>
             <FlexWrapper>
               <MdAttachMoney />
               <span>Finance</span>

@@ -26,7 +26,7 @@ export const StyledNavItem = styled.div`
   cursor: pointer;
 
   ${(props) =>
-    props.currentState &&
+    props.currentstate == "true" &&
     css`
       border: 2px solid var(--color-brand-600);
       box-shadow: var(--shadow-md);

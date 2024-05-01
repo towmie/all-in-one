@@ -1,5 +1,5 @@
 import { MdCurrencyBitcoin } from "react-icons/md";
-import { StyledSubNavLink, SubNavList } from "../styles/Nav";
+import { StyledSubNavLink, SubNavList } from "../styles/NavStyles";
 import { BsCashCoin } from "react-icons/bs";
 
 function SubMenuNav() {
