@@ -13,6 +13,7 @@ export async function getCryptoData() {
 }
 
 export async function updateCoinsData(cryptoList) {
+  const updatedArray = [];
   try {
     for (const coin of cryptoList) {
       const response = await fetch(
@@ -36,10 +37,17 @@ export async function updateCoinsData(cryptoList) {
           amountInUSD: data.rate * coin.amount,
         })
         .eq("id", coin.id);
+
+      updatedArray.push({
+        ...coin,
+        rate: data.rate,
+        amountInUSD: data.rate * coin.amount,
+      });
     }
   } catch (error) {
     throw new Error(error.message);
   }
+  return updatedArray;
 }
 
 export function getTotalCryptoBalance(data) {

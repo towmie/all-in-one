@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export function useUpdateCrypto() {
   const queryClient = useQueryClient();
 
-  const { mutate: updateCryptoBalance, isLoading: isUpdating } = useMutation({
+  const { mutateAsync: updateCryptoBalance, isLoading } = useMutation({
     mutationFn: (coins) => updateCoinsData(coins),
     onSuccess: () => {
       toast.success("Balance successfully updated");
@@ -14,5 +14,5 @@ export function useUpdateCrypto() {
     onError: (err) => toast.error(err.message),
   });
 
-  return { updateCryptoBalance, isUpdating };
+  return { updateCryptoBalance, isLoading };
 }

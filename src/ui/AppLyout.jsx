@@ -5,6 +5,7 @@ import { useCryptoList } from "../features/crypto/useCryptoBalance";
 import { useUpdateCrypto } from "../features/crypto/useUpdateCryptoRates";
 import { getTotalCryptoBalance } from "../services/apiCrypto";
 import SpinnerMini from "./SpinnerMini";
+import { useState } from "react";
 
 const Main = styled.main`
   flex-grow: 1;
@@ -19,7 +20,18 @@ const StyledAppLyout = styled.div`
 
 function AppLyout() {
   const { cryptoData, isLoading } = useCryptoList();
-  const { updateCryptoBalance, isUpdating } = useUpdateCrypto();
+  const { updateCryptoBalance } = useUpdateCrypto();
+  const [updatingBalance, setUpdatingBalance] = useState(false);
+
+  async function handleUpdating(cryptoData) {
+    setUpdatingBalance(true);
+    try {
+      await updateCryptoBalance(cryptoData);
+      setUpdatingBalance(false);
+    } catch (error) {
+      setUpdatingBalance(false);
+    }
+  }
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -28,12 +40,12 @@ function AppLyout() {
       <Sidebar />
       <Main>
         <button
-          disabled={isUpdating}
-          onClick={() => updateCryptoBalance(cryptoData)}
+          disabled={updatingBalance}
+          onClick={() => handleUpdating(cryptoData)}
         >
           Update
         </button>
-        {isUpdating ? (
+        {updatingBalance ? (
           <SpinnerMini />
         ) : (
           <h1>{getTotalCryptoBalance(cryptoData)}</h1>
