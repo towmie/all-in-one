@@ -28,6 +28,7 @@ const Cardlist = styled.ul`
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   gap: 2.4rem;
+  margin-bottom: 3.2rem;
 `;
 
 function CryptoSummary() {
@@ -46,13 +47,17 @@ function CryptoSummary() {
     [cryptoData]
   );
 
+  let isWorking = isLoading || isUpdating;
+
+  if (isWorking) return <Spinner />;
+
   const totalROI = getROI(
     getTotalCryptoBalance(cryptoData),
     getTotalCryptoSpentBalance(cryptoData)
   );
 
-  let isWorking = isLoading || isUpdating;
-  if (isWorking) return <Spinner />;
+  const profitInUSD =
+    getTotalCryptoBalance(cryptoData) - getTotalCryptoSpentBalance(cryptoData);
 
   return (
     <>
@@ -126,13 +131,14 @@ function CryptoSummary() {
                   {totalROI}
                   <small>%</small>
                 </Heading>
+                <span>
+                  {profitInUSD > 0
+                    ? `+${formatCurrency(profitInUSD)}`
+                    : `-${formatCurrency(profitInUSD)}`}
+                </span>
               </div>
             )}
           </div>
-          {/* <Heading as="h5">Overview</Heading>
-          <Heading type="primary" roi={totalROI}>
-            {totalROI}
-          </Heading> */}
         </CardItem>
       </Cardlist>
     </>
