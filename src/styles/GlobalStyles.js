@@ -2,6 +2,17 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
 :root {
+  --text-xxs: calc(0.625 * 16px);
+  --text-xs: calc(0.75 * 16px);
+  --text-sm: calc(0.875 * 16px);
+  --text-base: calc(1 * 16px);
+  --text-lg: calc(1.125 * 16px);
+  --text-xl: calc(1.25 * 16px);
+  --text-2xl: calc(1.5 * 16px);
+  --text-3xl: calc(1.875 * 16px);
+  --text-4xl: calc(2.25 * 16px);
+  --text-5xl: calc(3 * 16px);
+
   &, &.light-mode {
   /* Grey */
   --color-grey-0: #fff;

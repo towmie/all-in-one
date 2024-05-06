@@ -49,6 +49,11 @@ export const coinsChartColors = [
     value: 0,
     color: "#c2410c",
   },
+  {
+    name: "USDT",
+    value: 0,
+    color: "#15803d",
+  },
 
   {
     name: "LINK",

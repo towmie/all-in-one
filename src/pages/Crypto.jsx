@@ -1,11 +1,11 @@
-import { Outlet } from "react-router-dom";
 import CryptoSummary from "../features/crypto/CryptoSummary";
+import CoinsList from "../features/crypto/CoinsList";
 
 function Crypto() {
   return (
     <div>
       <CryptoSummary />
-      <Outlet />
+      <CoinsList />
     </div>
   );
 }

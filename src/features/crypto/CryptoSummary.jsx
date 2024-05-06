@@ -2,7 +2,6 @@ import styled from "styled-components";
 import SpinnerMini from "../../ui/SpinnerMini";
 import { useCryptoList } from "./../../features/crypto/useCryptoBalance";
 import { useUpdateCrypto } from "./../../features/crypto/useUpdateCryptoRates";
-import { getTotalCryptoBalance } from "./../../services/apiCrypto";
 import { useEffect, useState } from "react";
 import CardItem from "../../ui/CardItem";
 import {
@@ -13,51 +12,31 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { coinsChartColors } from "../../services/CoinsChartColors";
-import prepareArray from "../../utils/utils";
+import prepareArray, {
+  formatCurrency,
+  getROI,
+  getTotalCryptoBalance,
+  getTotalCryptoSpentBalance,
+} from "../../utils/utils";
+import Heading from "../../ui/Heading";
+import Button from "../../ui/Button";
+import Spinner from "../../ui/Spinner";
 
 const Cardlist = styled.ul`
+  margin-top: 1.6rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto 34rem auto;
+  grid-template-rows: auto auto;
   gap: 2.4rem;
-`;
-
-const ChartBox = styled.div`
-  /* Box */
-  border: 1px solid var(--color-grey-100);
-  border-radius: var(--border-radius-md);
-
-  /* padding: 2.4rem 3.2rem; */
-  grid-column: 3 / span 2;
-
-  & > *:first-child {
-    margin-bottom: 1.6rem;
-  }
-
-  & .recharts-legend-item-text {
-    font-size: 12px;
-  }
-
-  & .recharts-pie-label-text {
-    font-weight: 600;
-  }
 `;
 
 function CryptoSummary() {
   const [coloredData, setcoloredData] = useState("");
   const { cryptoData, isLoading } = useCryptoList();
-  const { updateCryptoBalance } = useUpdateCrypto();
-  const [updatingBalance, setUpdatingBalance] = useState(false);
+  const { updateCryptoBalance, isUpdating } = useUpdateCrypto();
 
   async function handleUpdating(cryptoData) {
-    setUpdatingBalance(true);
-    try {
-      await updateCryptoBalance(cryptoData);
-      setUpdatingBalance(false);
-    } catch (error) {
-      setUpdatingBalance(false);
-    }
+    updateCryptoBalance(cryptoData);
   }
 
   useEffect(
@@ -67,55 +46,93 @@ function CryptoSummary() {
     [cryptoData]
   );
 
-  if (isLoading) return <p>Loading...</p>;
+  const totalROI = getROI(
+    getTotalCryptoBalance(cryptoData),
+    getTotalCryptoSpentBalance(cryptoData)
+  );
+
+  let isWorking = isLoading || isUpdating;
+  if (isWorking) return <Spinner />;
 
   return (
     <>
-      <button
-        disabled={updatingBalance}
+      <Button
+        variation="link"
+        disabled={isWorking}
         onClick={() => handleUpdating(cryptoData)}
       >
-        Update
-      </button>
+        Refresh
+      </Button>
       <Cardlist>
-        <CardItem>
-          {updatingBalance ? (
-            <SpinnerMini />
-          ) : (
-            <h1>{getTotalCryptoBalance(cryptoData)}</h1>
-          )}
+        <CardItem type="total-balance">
+          <div>
+            {isWorking ? (
+              <SpinnerMini />
+            ) : (
+              <div>
+                <Heading as="h5">Total balance: </Heading>
+                <Heading type="primary">
+                  {formatCurrency(getTotalCryptoBalance(cryptoData))}
+                </Heading>
+                <span>
+                  Spent:
+                  {formatCurrency(getTotalCryptoSpentBalance(cryptoData))}
+                </span>
+              </div>
+            )}
+          </div>
         </CardItem>
-        <CardItem>
-          <ChartBox>
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
-                <Pie
-                  data={coloredData}
-                  nameKey="name"
-                  dataKey="amountInUSD"
-                  innerRadius={55}
-                  outerRadius={70}
-                  cx="50%"
-                  cy="50%"
+        <CardItem type="chart">
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie
+                data={coloredData}
+                nameKey="coinName"
+                dataKey="amountInUSD"
+                innerRadius={55}
+                outerRadius={70}
+                cx="50%"
+                cy="50%"
+              >
+                {coloredData?.map((entry) => (
+                  <Cell
+                    fill={entry.color}
+                    stroke={entry.color}
+                    key={entry.id}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend
+                verticalAlign="bottom"
+                layout="horizontal"
+                iconSize={10}
+                iconType="circle"
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </CardItem>
+        <CardItem type="total-balance">
+          <div>
+            {isWorking ? (
+              <SpinnerMini />
+            ) : (
+              <div>
+                <Heading as="h5">Overview</Heading>
+                <Heading
+                  type="primary"
+                  roi={totalROI > 0 ? "positive" : "negative"}
                 >
-                  {coloredData?.map((entry) => (
-                    <Cell
-                      fill={entry.color}
-                      stroke={entry.color}
-                      key={entry.id}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend
-                  verticalAlign="bottom"
-                  layout="horizontal"
-                  iconSize={10}
-                  iconType="circle"
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartBox>
+                  {totalROI}
+                  <small>%</small>
+                </Heading>
+              </div>
+            )}
+          </div>
+          {/* <Heading as="h5">Overview</Heading>
+          <Heading type="primary" roi={totalROI}>
+            {totalROI}
+          </Heading> */}
         </CardItem>
       </Cardlist>
     </>

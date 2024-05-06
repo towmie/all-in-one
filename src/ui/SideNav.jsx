@@ -45,7 +45,7 @@ function SideNav() {
         </li>
 
         <li>
-          <StyledNavLink to="/users">
+          <StyledNavLink to="/projects">
             <IoBriefcaseOutline />
             <span>Projects</span>
           </StyledNavLink>

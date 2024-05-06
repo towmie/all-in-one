@@ -6,6 +6,7 @@ const StyledSidebar = styled.aside`
   background-color: var(--color-grey-0);
   width: clamp(320px, 30%, 450px);
   padding: 1.6rem;
+  border-right: 1px solid var(--color-grey-100);
 `;
 
 function Sidebar() {
