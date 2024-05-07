@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import supabase, { coinApiKEY } from "./supabase";
 
 export async function getCryptoData() {
@@ -28,7 +29,7 @@ export async function updateCryptoData(coins) {
         }
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch data for ${coin.name}`);
+        throw new Error(`Failed to fetch data for ${coin.coinName}`);
       }
 
       const data = await response.json();
@@ -55,3 +56,43 @@ export async function updateCryptoData(coins) {
     throw new Error(error.message);
   }
 }
+
+export async function createCoin(coin, id) {
+  if (!id) {
+    const response = await fetch(
+      `https://rest.coinapi.io/v1/exchangerate/${coin.coinName
+        .trim()
+        .toUpperCase()}/USD`,
+      {
+        headers: {
+          "X-CoinAPI-Key": `${coinApiKEY}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      toast.error("Unkonwn Coin");
+      throw new Error(
+        `Failed to fetch data for ${coin.coinName}, please use short name(Solana: SOL)`
+      );
+    }
+
+    const data = await response.json();
+
+    const { data: updatedCoin } = await supabase
+      .from("cryptoOverview")
+      .insert([
+        {
+          coinName: coin.coinName.trim().toUpperCase(),
+          amount: +coin.amount,
+          rate: data.rate,
+          amountInUSD: data.rate * +coin.amount,
+          amountSpent: +coin.spentUSD,
+        },
+      ])
+      .select();
+    return updatedCoin;
+  }
+}
+
+export async function addCoinData() {}

@@ -14,6 +14,5 @@ export function useUpdateCrypto() {
       },
       onError: (err) => toast.error(err.message),
     });
-  console.log(isUpdating);
   return { updateCryptoBalance, isUpdating };
 }

@@ -32,7 +32,7 @@ const Cardlist = styled.ul`
 `;
 
 function CryptoSummary() {
-  const [coloredData, setcoloredData] = useState("");
+  // const [coloredData, setcoloredData] = useState("");
   const { cryptoData, isLoading } = useCryptoList();
   const { updateCryptoBalance, isUpdating } = useUpdateCrypto();
 
@@ -40,12 +40,12 @@ function CryptoSummary() {
     updateCryptoBalance(cryptoData);
   }
 
-  useEffect(
-    function () {
-      setcoloredData(prepareArray(cryptoData));
-    },
-    [cryptoData]
-  );
+  // useEffect(
+  //   function () {
+  //     setcoloredData(prepareArray(cryptoData));
+  //   },
+  //   [cryptoData]
+  // );
 
   let isWorking = isLoading || isUpdating;
 
@@ -88,7 +88,7 @@ function CryptoSummary() {
           </div>
         </CardItem>
         <CardItem type="chart">
-          <ResponsiveContainer width="100%" height={240}>
+          {/* <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
                 data={coloredData}
@@ -115,7 +115,7 @@ function CryptoSummary() {
                 iconType="circle"
               />
             </PieChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer> */}
         </CardItem>
         <CardItem type="total-balance">
           <div>

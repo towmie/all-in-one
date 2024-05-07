@@ -1,13 +1,10 @@
-import { useState } from "react";
-
-import { FaChevronDown } from "react-icons/fa";
 import { HiOutlineHome } from "react-icons/hi";
 import { IoBriefcaseOutline } from "react-icons/io5";
-import { MdAttachMoney } from "react-icons/md";
-import { NavList, StyledNavItem, StyledNavLink } from "../styles/NavStyles";
-import SubMenuNav from "./SubMenuNav";
-import ToggleButton from "./ToggleButton";
+import { MdCurrencyBitcoin } from "react-icons/md";
+import { NavList, StyledNavLink } from "../styles/NavStyles";
+
 import styled from "styled-components";
+import { BsCashCoin } from "react-icons/bs";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -16,12 +13,6 @@ const FlexWrapper = styled.div`
 `;
 
 function SideNav() {
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  function handleToggle() {
-    setShowDropdown(!showDropdown);
-  }
-
   return (
     <nav>
       <NavList>
@@ -32,16 +23,16 @@ function SideNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavItem currentstate={showDropdown.toString()}>
-            <FlexWrapper>
-              <MdAttachMoney />
-              <span>Finance</span>
-            </FlexWrapper>
-            <ToggleButton onClick={() => handleToggle()}>
-              <FaChevronDown />
-            </ToggleButton>
-          </StyledNavItem>
-          {showDropdown && <SubMenuNav />}
+          <StyledNavLink to="/crypto">
+            <MdCurrencyBitcoin />
+            <span>Crypto</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/fiat">
+            <BsCashCoin />
+            <span>Fiat spendings/savings</span>
+          </StyledNavLink>
         </li>
 
         <li>

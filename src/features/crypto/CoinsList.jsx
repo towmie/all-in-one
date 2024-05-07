@@ -7,9 +7,9 @@ import { useUpdateCrypto } from "./useUpdateCryptoRates";
 function CoinsList() {
   const { cryptoData, isLoading } = useCryptoList();
   const { isUpdating } = useUpdateCrypto();
-  console.log(isUpdating);
 
   if (isLoading || isUpdating) return <Spinner />;
+
   return (
     <Table columns="2.4rem 1fr 1fr 1fr 1fr 1fr 1fr 0.6fr">
       <Table.Header>
@@ -20,7 +20,7 @@ function CoinsList() {
         <div>In USD</div>
         <div>Spent $</div>
         <div>Profit</div>
-        <div>Add new income</div>
+        <div></div>
       </Table.Header>
       <Table.Body
         data={cryptoData}

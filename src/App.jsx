@@ -27,6 +27,7 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="crypto" element={<Crypto />} />
+            <Route path="fiat" element={<Dashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

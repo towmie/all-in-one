@@ -3,6 +3,8 @@ import CoinsList from "../features/crypto/CoinsList";
 import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import styled from "styled-components";
+import AddCoin from "../features/crypto/AddCoin";
+import { useState } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -12,13 +14,18 @@ const Container = styled.div`
 `;
 
 function Crypto() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
       <CryptoSummary />
       <Container>
         <Heading as="h3">Overview:</Heading>
-        <Button type="primary">Add new income/coin</Button>
+        <Button onClick={() => setIsOpen(!isOpen)} type="primary">
+          Add new income/coin
+        </Button>
       </Container>
+      <AddCoin setIsOpen={setIsOpen} isOpen={isOpen} />
       <CoinsList />
     </div>
   );
