@@ -1,5 +1,7 @@
 import { createContext, useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { getROI } from "../utils/utils";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -90,9 +92,26 @@ function Row({ children }) {
 }
 
 function Body({ data, render }) {
+  const [searchParams] = useSearchParams();
+
   if (!data.length) return <Empty>No data to show at the moment</Empty>;
 
-  return <StyledBody>{data.map(render)}</StyledBody>;
+  const sortBy = searchParams.get("sortBy") || "";
+  const [field, direction] = sortBy.split("-");
+  let coinList = [];
+
+  if (field === "profit") {
+    coinList = data.map((coin) => {
+      return { ...coin, profit: getROI(coin.amountInUSD, coin.amountSpent) };
+    });
+  } else {
+    coinList = data;
+  }
+
+  const modifier = direction === "asc" ? 1 : -1;
+  const sortedRows = coinList.sort((a, b) => (a[field] - b[field]) * modifier);
+
+  return <StyledBody>{sortedRows.map(render)}</StyledBody>;
 }
 
 Table.Header = Header;

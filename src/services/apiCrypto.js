@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import supabase, { coinApiKEY } from "./supabase";
+import { getROI } from "../utils/utils";
 
 export async function getCryptoData() {
   let { data: cryptoOverview, error } = await supabase
@@ -79,7 +80,7 @@ export async function createCoin(coin, id) {
 
     const data = await response.json();
 
-    const { data: updatedCoin } = await supabase
+    const { data: updatedCoin, error } = await supabase
       .from("cryptoOverview")
       .insert([
         {
@@ -91,6 +92,11 @@ export async function createCoin(coin, id) {
         },
       ])
       .select();
+
+    if (error) {
+      toast.error("Unkonwn Coin");
+      throw new Error(`Failed to insert data for ${coin.coinName}`);
+    }
     return updatedCoin;
   }
 }

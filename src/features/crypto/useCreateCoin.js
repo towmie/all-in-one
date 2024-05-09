@@ -11,6 +11,9 @@ export function useCreateCoin() {
       toast.success("New coin added");
       clientQuery.invalidateQueries({ queryKey: ["cryptolist"] });
     },
+    onError: () => {
+      toast.error('Coin cannot be found')
+    }
   });
 
   return {
