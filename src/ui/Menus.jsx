@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  position: relative;
 `;
 
 const StyledToggle = styled.button`
@@ -17,7 +18,6 @@ const StyledToggle = styled.button`
   border-radius: var(--border-radius-sm);
   transform: translateX(0.8rem);
   transition: all 0.2s;
-  position: relative;
 
   &:hover {
     background-color: var(--color-grey-100);
@@ -31,7 +31,7 @@ const StyledToggle = styled.button`
 `;
 
 const StyledList = styled.ul`
-  position: absolute;
+  position: fixed;
 
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
@@ -75,6 +75,18 @@ function Menus({ children }) {
   const close = () => setOpenId("");
   const open = setOpenId;
 
+  useEffect(() => {
+    function handleScroll() {
+      setOpenId("");
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <MenusContext.Provider
       value={{ openId, close, open, position, setPosition }}
@@ -91,7 +103,7 @@ function Toggle({ id }) {
     e.stopPropagation();
 
     const rect = e.target.closest("button").getBoundingClientRect();
-    console.log();
+
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,

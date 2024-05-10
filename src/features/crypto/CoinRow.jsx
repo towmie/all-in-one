@@ -53,6 +53,10 @@ ROI.defaultProps = {
   roi: "neutral",
 };
 
+const MenuCell = styled.div`
+  position: relative;
+`;
+
 function CoinRow({ coin, index }) {
   const { id: coinID, coinName, amount, rate, amountInUSD, amountSpent } = coin;
   const roi = getROI(amountInUSD, amountSpent);
@@ -66,8 +70,8 @@ function CoinRow({ coin, index }) {
       <div>{amount}</div>
       <Price>{formatCurrency(amountInUSD)}</Price>
       <div>{formatCurrency(amountSpent)}</div>
-      <ROI roi={roi > 0 ? "positive" : "negative"}>{roi}%</ROI>
-      <div>
+      <ROI $roi={roi > 0 ? "positive" : "negative"}>{roi}%</ROI>
+      <MenuCell>
         <Modal>
           <Menus.Menu>
             <Menus.Toggle id={coinID} />
@@ -82,7 +86,7 @@ function CoinRow({ coin, index }) {
             </Menus.List>
           </Menus.Menu>
         </Modal>
-      </div>
+      </MenuCell>
     </Table.Row>
   );
 }
