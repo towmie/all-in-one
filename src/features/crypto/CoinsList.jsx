@@ -6,6 +6,7 @@ import { useCryptoList } from "./useCryptoBalance";
 import { useUpdateCrypto } from "./useUpdateCryptoRates";
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
+import Menus from "../../ui/Menus";
 
 const StyledSort = styled.div`
   display: flex;
@@ -35,7 +36,7 @@ function CoinsList() {
   if (isLoading || isUpdating) return <Spinner />;
 
   return (
-    <Table columns="2.4rem 1fr 1fr 1fr 1fr 1fr 1fr 0.6fr">
+    <Table columns="2.4rem 1fr 1fr 1fr 1fr 1fr 1fr 2.4rem">
       <Table.Header>
         <Cell>Nº</Cell>
         <Cell>Coin</Cell>
@@ -76,10 +77,12 @@ function CoinsList() {
         </Cell>
         <Cell></Cell>
       </Table.Header>
-      <Table.Body
-        data={cryptoData}
-        render={(coin, i) => <CoinRow coin={coin} index={i} key={coin.id} />}
-      />
+      <Menus>
+        <Table.Body
+          data={cryptoData}
+          render={(coin, i) => <CoinRow coin={coin} index={i} key={coin.id} />}
+        />
+      </Menus>
     </Table>
   );
 }

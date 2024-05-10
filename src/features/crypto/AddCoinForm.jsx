@@ -5,19 +5,21 @@ import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import { useCreateCoin } from "./useCreateCoin";
 import Spinner from "../../ui/Spinner";
-import { useCryptoList } from "./useCryptoBalance";
-import Select from "../../ui/Select";
 
-function AddCoinForm({ onCloseModal, newCoin = {} }) {
-  const { register, formState, getValues, handleSubmit, reset } = useForm();
+function AddCoinForm({ onCloseModal }) {
+  const { register, handleSubmit, reset } = useForm();
   const { udateCoin, isUpdating } = useCreateCoin();
-  const { cryptoData } = useCryptoList();
-  console.log(cryptoData);
 
-  function onHandleSubmit({ newCoin, coinName, amount, spentUSD }) {
-    if (!newCoin) {
-      udateCoin({ coinName, amount, spentUSD });
-    }
+  function onHandleSubmit({ coinName, amount, spentUSD }) {
+    udateCoin(
+      { coinName, amount, spentUSD },
+      {
+        onSuccess: () => {
+          reset();
+          onCloseModal?.();
+        },
+      }
+    );
     reset();
   }
 

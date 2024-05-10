@@ -97,6 +97,9 @@ function Body({ data, render }) {
   if (!data.length) return <Empty>No data to show at the moment</Empty>;
 
   const sortBy = searchParams.get("sortBy") || "";
+
+  if (!sortBy) return <StyledBody>{data.map(render)}</StyledBody>;
+
   const [field, direction] = sortBy.split("-");
   let coinList = [];
 

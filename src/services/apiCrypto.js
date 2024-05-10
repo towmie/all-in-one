@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import supabase, { coinApiKEY } from "./supabase";
-import { getROI } from "../utils/utils";
 
 export async function getCryptoData() {
   let { data: cryptoOverview, error } = await supabase

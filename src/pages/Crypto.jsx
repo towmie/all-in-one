@@ -3,8 +3,8 @@ import CoinsList from "../features/crypto/CoinsList";
 import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import styled from "styled-components";
-import AddCoin from "../features/crypto/AddCoin";
-import { useState } from "react";
+import Modal from "../ui/Modal";
+import AddCoinForm from "../features/crypto/AddCoinForm";
 
 const Container = styled.div`
   display: flex;
@@ -14,18 +14,20 @@ const Container = styled.div`
 `;
 
 function Crypto() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div>
       <CryptoSummary />
-      <Container>
-        <Heading as="h3">Overview:</Heading>
-        <Button onClick={() => setIsOpen(!isOpen)} type="primary">
-          Add new income/coin
-        </Button>
-      </Container>
-      <AddCoin setIsOpen={setIsOpen} isOpen={isOpen} />
+      <Modal>
+        <Container>
+          <Heading as="h3">Overview:</Heading>
+          <Modal.Open opens="add-coin-form">
+            <Button type="primary">Add new income/coin</Button>
+          </Modal.Open>
+        </Container>
+        <Modal.Window name="add-coin-form">
+          <AddCoinForm />
+        </Modal.Window>
+      </Modal>
       <CoinsList />
     </div>
   );
