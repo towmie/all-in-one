@@ -100,4 +100,17 @@ export async function createCoin(coin, id) {
   }
 }
 
-export async function addCoinData() {}
+export async function deleteCoin(id) {
+  const { data, error } = await supabase
+    .from("cryptoOverview")
+    .delete()
+    .eq("id", id);
+
+  console.log(data);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Coin could not be deleted");
+  }
+  return data;
+}

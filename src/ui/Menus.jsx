@@ -75,17 +75,17 @@ function Menus({ children }) {
   const close = () => setOpenId("");
   const open = setOpenId;
 
-  useEffect(() => {
-    function handleScroll() {
-      setOpenId("");
-    }
+  //   useEffect(() => {
+  //     function handleScroll() {
+  //       setOpenId("");
+  //     }
 
-    window.addEventListener("scroll", handleScroll);
+  //     window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  //     return () => {
+  //       window.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }, []);
 
   return (
     <MenusContext.Provider

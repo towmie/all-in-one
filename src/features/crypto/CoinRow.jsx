@@ -1,20 +1,13 @@
 import styled, { css } from "styled-components";
 
-import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { HiPencil, HiTrash } from "react-icons/hi2";
 import Modal from "./../../ui/Modal";
-// import ConfirmDelete from "./../../ui/ConfirmDelete";
 import Table from "./../../ui/Table";
 import { formatCurrency, getROI } from "./../../utils/utils";
-import Menus from "./../../ui/Menus";
-
-// const Img = styled.img`
-//   display: block;
-//   width: 6.4rem;
-//   aspect-ratio: 3 / 2;
-//   object-fit: cover;
-//   object-position: center;
-//   transform: scale(1.5) translateX(-7px);
-// `;
+import UpdateCoinData from "./UpdateCoinData";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useDeleteCoin } from "./useDeleteCoin";
+import ButtonIcon from "../../ui/ButtonIcon";
 
 const Coin = styled.div`
   font-size: 1.8rem;
@@ -55,36 +48,48 @@ ROI.defaultProps = {
 
 const MenuCell = styled.div`
   position: relative;
+  display: flex;
 `;
 
 function CoinRow({ coin, index }) {
   const { id: coinID, coinName, amount, rate, amountInUSD, amountSpent } = coin;
   const roi = getROI(amountInUSD, amountSpent);
+  const { isDeleting, deleteCoin } = useDeleteCoin();
 
   return (
     <Table.Row>
-      {/* <Img src={image} /> */}
       <div>{index + 1}</div>
       <Coin>{coinName}</Coin>
       <div>{formatCurrency(rate)}</div>
       <div>{amount}</div>
       <Price>{formatCurrency(amountInUSD)}</Price>
       <div>{formatCurrency(amountSpent)}</div>
-      <ROI $roi={roi > 0 ? "positive" : "negative"}>{roi}%</ROI>
+      <ROI roi={roi > 0 ? "positive" : "negative"}>{roi}%</ROI>
       <MenuCell>
         <Modal>
-          <Menus.Menu>
-            <Menus.Toggle id={coinID} />
-            <Menus.List id={coinID}>
-              <Modal.Open opens="edit">
-                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-              </Modal.Open>
+          <Modal.Open opens="edit">
+            <ButtonIcon>
+              <HiPencil />
+            </ButtonIcon>
+          </Modal.Open>
 
-              <Modal.Open opens="delete">
-                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-              </Modal.Open>
-            </Menus.List>
-          </Menus.Menu>
+          <Modal.Open opens="delete-coin">
+            <ButtonIcon>
+              <HiTrash />
+            </ButtonIcon>
+          </Modal.Open>
+
+          <Modal.Window name="edit">
+            <UpdateCoinData coin={coin} />
+          </Modal.Window>
+
+          <Modal.Window name="delete-coin">
+            <ConfirmDelete
+              resourceName="coins"
+              disabled={isDeleting}
+              onConfirm={() => deleteCoin(coinID)}
+            />
+          </Modal.Window>
         </Modal>
       </MenuCell>
     </Table.Row>

@@ -36,7 +36,7 @@ function CoinsList() {
   if (isLoading || isUpdating) return <Spinner />;
 
   return (
-    <Table columns="2.4rem 1fr 1fr 1fr 1fr 1fr 1fr 2.4rem">
+    <Table columns="2.4rem 1fr 1fr 1fr 1fr 1fr 1fr 7rem">
       <Table.Header>
         <Cell>Nº</Cell>
         <Cell>Coin</Cell>

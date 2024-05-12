@@ -62,7 +62,7 @@ function CryptoSummary() {
   return (
     <>
       <Button
-        $variation="link"
+        variation="link"
         disabled={isWorking}
         onClick={() => handleUpdating(cryptoData)}
       >
