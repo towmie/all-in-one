@@ -29,7 +29,7 @@ export async function getSaved() {
 
   if (error) throw new Error(error.message);
 
-  const saved = data.reduce((acc, cur) => cur.outcome + acc, 0);
+  const saved = data.reduce((acc, cur) => cur.saved + acc, 0);
 
   return saved;
 }

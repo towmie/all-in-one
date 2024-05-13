@@ -16,8 +16,8 @@ function FiatSummary() {
 
   if (isWorking) return <Spinner />;
 
-  const { fiatIncomes, totalIncome } = fiatIncome;
-  const { fiatOutcomes, totalOutcome } = fiatOutcome;
+  const { totalIncome } = fiatIncome;
+  const { totalOutcome } = fiatOutcome;
 
   return (
     <>

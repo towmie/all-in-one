@@ -9,6 +9,7 @@ import { useCryptoList } from "../features/crypto/useCryptoBalance";
 import { useUpdateCrypto } from "../features/crypto/useUpdateCryptoRates";
 import { useState } from "react";
 import Spinner from "../ui/Spinner";
+import { IoRefresh } from "react-icons/io5";
 
 const Container = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ function Crypto() {
         disabled={isWorking}
         onClick={() => handleUpdating(cryptoData)}
       >
-        Refresh
+        <IoRefresh /> Refresh
       </Button>
       <CryptoSummary cryptoData={cryptoData} />
       <Modal>

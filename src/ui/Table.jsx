@@ -74,6 +74,21 @@ function Table({ columns, children }) {
   );
 }
 
+export const StyledSort = styled.div`
+  display: flex;
+  flex-direction: column;
+  & button {
+    border: none;
+    background-color: transparent;
+  }
+`;
+
+export const Cell = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+`;
+
 function Header({ children }) {
   const { columns } = useContext(TableContext);
   return (

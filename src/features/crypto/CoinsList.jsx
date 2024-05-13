@@ -1,27 +1,8 @@
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
-import Spinner from "../../ui/Spinner";
-import Table from "../../ui/Table";
+import Table, { Cell, StyledSort } from "../../ui/Table";
 import CoinRow from "./CoinRow";
-import { useCryptoList } from "./useCryptoBalance";
-import { useUpdateCrypto } from "./useUpdateCryptoRates";
-import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import Menus from "../../ui/Menus";
-
-const StyledSort = styled.div`
-  display: flex;
-  flex-direction: column;
-  & button {
-    border: none;
-    background-color: transparent;
-  }
-`;
-
-const Cell = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-`;
 
 function CoinsList({ cryptoData }) {
   const [searchParams, setSearchParams] = useSearchParams();

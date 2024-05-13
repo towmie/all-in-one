@@ -27,7 +27,15 @@ const variations = {
     font-size: 20px;
     font-weight: 600;
     padding: 0;
+    padding-bottom: 1rem;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    & svg {
+      width: 1.8rem;
+    }
 
     &::after {
       content: "";
