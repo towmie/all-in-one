@@ -34,10 +34,16 @@ const Cardlist = styled.ul`
 function CryptoSummary() {
   // const [coloredData, setcoloredData] = useState("");
   const { cryptoData, isLoading } = useCryptoList();
-  const { updateCryptoBalance, isUpdating } = useUpdateCrypto();
+  const { updateCryptoBalance } = useUpdateCrypto();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   async function handleUpdating(cryptoData) {
-    updateCryptoBalance(cryptoData);
+    setIsUpdating(true);
+    updateCryptoBalance(cryptoData, {
+      onSuccess: () => {
+        setIsUpdating(false);
+      },
+    });
   }
 
   // useEffect(

@@ -50,11 +50,10 @@ export async function updateCryptoData(coins) {
 
       updatedCoins.push(updatedCoinData);
     }
-
-    return updatedCoins;
   } catch (error) {
     throw new Error(error.message);
   }
+  return updatedCoins;
 }
 
 export async function createCoin(coin, id) {
