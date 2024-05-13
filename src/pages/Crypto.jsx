@@ -5,6 +5,10 @@ import Heading from "../ui/Heading";
 import styled from "styled-components";
 import Modal from "../ui/Modal";
 import AddCoinForm from "../features/crypto/AddCoinForm";
+import { useCryptoList } from "../features/crypto/useCryptoBalance";
+import { useUpdateCrypto } from "../features/crypto/useUpdateCryptoRates";
+import { useState } from "react";
+import Spinner from "../ui/Spinner";
 
 const Container = styled.div`
   display: flex;
@@ -14,9 +18,32 @@ const Container = styled.div`
 `;
 
 function Crypto() {
+  const { cryptoData, isLoading } = useCryptoList();
+  const { updateCryptoBalance } = useUpdateCrypto();
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  function handleUpdating(cryptoData) {
+    setIsUpdating(true);
+    updateCryptoBalance(cryptoData, {
+      onSuccess: () => {
+        setIsUpdating(false);
+      },
+    });
+  }
+  let isWorking = isLoading || isUpdating;
+
+  if (isWorking) return <Spinner />;
+
   return (
     <div>
-      <CryptoSummary />
+      <Button
+        variation="link"
+        disabled={isWorking}
+        onClick={() => handleUpdating(cryptoData)}
+      >
+        Refresh
+      </Button>
+      <CryptoSummary cryptoData={cryptoData} />
       <Modal>
         <Container>
           <Heading as="h3">Overview:</Heading>
@@ -28,7 +55,7 @@ function Crypto() {
           <AddCoinForm />
         </Modal.Window>
       </Modal>
-      <CoinsList />
+      <CoinsList cryptoData={cryptoData} />
     </div>
   );
 }

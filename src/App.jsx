@@ -32,7 +32,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="crypto" element={<Crypto />} />
             <Route path="fiat" element={<Fiat />}>
-              <Route index element={<FiatOverview />} />
+              <Route index element={<Navigate replace to="overview" />} />
+              <Route path="overview" element={<FiatOverview />} />
               <Route path="income" element={<FiatIncome />} />
               <Route path="outcome" element={<FiatOutcome />} />
             </Route>

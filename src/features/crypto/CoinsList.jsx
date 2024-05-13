@@ -23,17 +23,13 @@ const Cell = styled.div`
   gap: 0.8rem;
 `;
 
-function CoinsList() {
+function CoinsList({ cryptoData }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { cryptoData, isLoading } = useCryptoList();
-  const { isUpdating } = useUpdateCrypto();
 
   function handleSort(value) {
     searchParams.set("sortBy", value);
     setSearchParams(searchParams);
   }
-
-  if (isLoading || isUpdating) return <Spinner />;
 
   return (
     <Table columns="2.4rem 1fr 1fr 1fr 1fr 1fr 1fr 7rem">
