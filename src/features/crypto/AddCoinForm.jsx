@@ -7,8 +7,10 @@ import { useCreateCoin } from "./useCreateCoin";
 import Spinner from "../../ui/Spinner";
 
 function AddCoinForm({ onCloseModal }) {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm();
   const { udateCoin, isUpdating } = useCreateCoin();
+
+  const { errors } = formState;
 
   function onHandleSubmit({ coinName, amount, spentUSD }) {
     udateCoin(
@@ -27,14 +29,32 @@ function AddCoinForm({ onCloseModal }) {
 
   return (
     <Form onSubmit={handleSubmit(onHandleSubmit)}>
-      <FormRow label="Coin Name">
-        <Input type="text" id="coinName" {...register("coinName")} />
+      <FormRow label="Coin Name" error={errors?.coinName?.message}>
+        <Input
+          type="text"
+          id="coinName"
+          {...register("coinName", { required: "This field is required" })}
+        />
       </FormRow>
-      <FormRow label="Amount">
-        <Input type="number" id="amount" {...register("amount")} />
+      <FormRow label="Amount" error={errors?.amount?.message}>
+        <Input
+          type="number"
+          id="amount"
+          {...register("amount", {
+            required: "This field is required",
+            validate: (value) => value > 0 || "Value must be greater than 0",
+          })}
+        />
       </FormRow>
-      <FormRow label="Spent USD">
-        <Input type="number" id="spentUSD" {...register("spentUSD")} />
+      <FormRow label="Spent USD" error={errors?.spentUSD?.message}>
+        <Input
+          type="number"
+          id="spentUSD"
+          {...register("spentUSD", {
+            required: "This field is required",
+            validate: (value) => value > 0 || "Value must be greater than 0",
+          })}
+        />
       </FormRow>
       <Button>Add new income</Button>
     </Form>

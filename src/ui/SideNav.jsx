@@ -1,16 +1,9 @@
 import { HiOutlineHome } from "react-icons/hi";
 import { IoBriefcaseOutline } from "react-icons/io5";
 import { MdCurrencyBitcoin } from "react-icons/md";
-import { NavList, StyledNavLink } from "../styles/NavStyles";
+import { NavList, StyledNavLink } from "../ui/NavStyles";
 
-import styled from "styled-components";
 import { BsCashCoin } from "react-icons/bs";
-
-const FlexWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-`;
 
 function SideNav() {
   return (

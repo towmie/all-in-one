@@ -4,10 +4,10 @@ import { HiPencil, HiTrash } from "react-icons/hi2";
 import Modal from "./../../ui/Modal";
 import Table from "./../../ui/Table";
 import { formatCurrency, getROI } from "./../../utils/utils";
-import UpdateCoinData from "./UpdateCoinData";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteCoin } from "./useDeleteCoin";
 import ButtonIcon from "../../ui/ButtonIcon";
+import EditCoinForm from "./EditCoinForm";
 
 const Coin = styled.div`
   font-size: 1.8rem;
@@ -80,7 +80,7 @@ function CoinRow({ coin, index }) {
           </Modal.Open>
 
           <Modal.Window name="edit">
-            <UpdateCoinData coin={coin} />
+            <EditCoinForm coinToEdit={coin} />
           </Modal.Window>
 
           <Modal.Window name="delete-coin">
