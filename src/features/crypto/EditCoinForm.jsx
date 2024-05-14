@@ -58,7 +58,16 @@ function EditCoinForm({ coinToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-      <Button disabled={isUpdating}>Update Coin</Button>
+      <FormRow>
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
+          Cancel
+        </Button>
+        <Button>Update</Button>
+      </FormRow>
     </Form>
   );
 }

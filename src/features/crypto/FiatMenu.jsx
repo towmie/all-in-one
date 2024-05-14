@@ -45,6 +45,11 @@ function FiatMenu() {
             Outcome List
           </Button>
         </StyledNavLink>
+        <StyledNavLink to="/fiat/saved">
+          <Button size="medium" variation="secondary">
+            Savings
+          </Button>
+        </StyledNavLink>
       </MenuContainer>
 
       <MenuContainer>

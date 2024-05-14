@@ -18,6 +18,7 @@ function FiatSummary() {
 
   const { totalIncome } = fiatIncome;
   const { totalOutcome } = fiatOutcome;
+  const { totalSaved } = saved;
 
   return (
     <>
@@ -61,7 +62,7 @@ function FiatSummary() {
           <CardItem type="total-balance">
             <div>
               <Heading as="h5">Saved:</Heading>
-              <Heading>{formatCurrency(saved)}</Heading>
+              <Heading>{formatCurrency(totalSaved)}</Heading>
             </div>
           </CardItem>
         </Cardlist>

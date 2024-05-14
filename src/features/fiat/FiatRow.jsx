@@ -7,6 +7,8 @@ import { formatCurrency } from "./../../utils/utils";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 // import { useDeleteCoin } from "./useDeleteCoin";
 import ButtonIcon from "../../ui/ButtonIcon";
+import { format } from "date-fns";
+import FiatEditForm from "./FiatEditForm";
 
 const MenuCell = styled.div`
   position: relative;
@@ -16,19 +18,29 @@ const MenuCell = styled.div`
 function FiatRow({ fiatItem, type, index }) {
   let itemObj;
   if (type === "income") {
-    const { income, date, category } = fiatItem;
+    const { id, income, date, category } = fiatItem;
     itemObj = {
+      id,
       item: income,
       date,
       category,
     };
   }
   if (type === "outcome") {
-    const { outcome, date, category } = fiatItem;
+    const { id, outcome, date, category } = fiatItem;
     itemObj = {
       item: outcome,
       date,
       category,
+      id,
+    };
+  }
+  if (type === "saved") {
+    const { id, saved, date } = fiatItem;
+    itemObj = {
+      item: saved,
+      date,
+      id,
     };
   }
 
@@ -36,8 +48,8 @@ function FiatRow({ fiatItem, type, index }) {
     <Table.Row>
       <div>{index + 1}</div>
       <div>{formatCurrency(itemObj.item)}</div>
-      <div>{itemObj.date}</div>
-      <div>{itemObj.category}</div>
+      <div>{format(new Date(itemObj.date), "MMM dd yyyy")}</div>
+      {type !== "saved" && <div>{itemObj.category}</div>}
 
       <MenuCell>
         <Modal>
@@ -54,7 +66,7 @@ function FiatRow({ fiatItem, type, index }) {
           </Modal.Open>
 
           <Modal.Window name="edit-fiat">
-            {/* <EditCoinForm coinToEdit={coin} /> */}
+            <FiatEditForm item={itemObj} type={type} />
           </Modal.Window>
 
           <Modal.Window name="delete-fiat">

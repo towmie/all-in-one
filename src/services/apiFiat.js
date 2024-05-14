@@ -25,11 +25,28 @@ export async function getFiatOutcome() {
 }
 
 export async function getSaved() {
-  let { data, error } = await supabase.from("saved").select("*");
+  let { data: saved, error } = await supabase.from("saved").select("*");
 
   if (error) throw new Error(error.message);
 
-  const saved = data.reduce((acc, cur) => cur.saved + acc, 0);
+  const totalSaved = saved.reduce((acc, cur) => cur.saved + acc, 0);
 
-  return saved;
+  return { saved, totalSaved };
+}
+
+export async function updateFiatItem({ data, id, type }) {
+  let supabaseTable;
+  if (type === "income") supabaseTable = "fiatIncome";
+  if (type === "outcome") supabaseTable = "fiatOutcome";
+  if (type === "saved") supabaseTable = "saved";
+
+  const { data: updatedValue, error } = await supabase
+    .from(`${supabaseTable}`)
+    .update({ ...data })
+    .eq("id", id)
+    .select();
+
+  if (error) throw new Error(error.message);
+
+  return { updatedValue, supabaseTable };
 }
