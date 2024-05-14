@@ -9,6 +9,7 @@ import ConfirmDelete from "../../ui/ConfirmDelete";
 import ButtonIcon from "../../ui/ButtonIcon";
 import { format } from "date-fns";
 import FiatEditForm from "./FiatEditForm";
+import { useDeleteFiat } from "./useDeleteFiat";
 
 const MenuCell = styled.div`
   position: relative;
@@ -17,6 +18,8 @@ const MenuCell = styled.div`
 
 function FiatRow({ fiatItem, type, index }) {
   let itemObj;
+  const { deleteFiat, isDeleting } = useDeleteFiat();
+
   if (type === "income") {
     const { id, income, date, category } = fiatItem;
     itemObj = {
@@ -72,8 +75,8 @@ function FiatRow({ fiatItem, type, index }) {
           <Modal.Window name="delete-fiat">
             <ConfirmDelete
               resourceName="income"
-              //   disabled={isDeleting}
-              //   onConfirm={() => deleteCoin(coinID)}
+              disabled={isDeleting}
+              onConfirm={() => deleteFiat({ type, id: itemObj.id })}
             />
           </Modal.Window>
         </Modal>

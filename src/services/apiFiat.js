@@ -50,3 +50,19 @@ export async function updateFiatItem({ data, id, type }) {
 
   return { updatedValue, supabaseTable };
 }
+
+export async function deleteFiatitem({ type, id }) {
+  let supabaseTable;
+  if (type === "income") supabaseTable = "fiatIncome";
+  if (type === "outcome") supabaseTable = "fiatOutcome";
+  if (type === "saved") supabaseTable = "saved";
+
+  const { data, error } = await supabase
+    .from(supabaseTable)
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+
+  return { data, supabaseTable };
+}
