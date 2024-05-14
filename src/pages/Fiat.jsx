@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import FiatSummary from "../features/fiat/FiatSummary";
-import FiatMenu from "../features/crypto/FiatMenu";
+import FiatMenu from "../features/fiat/FiatMenu";
 
 function FiatOverview() {
   return (

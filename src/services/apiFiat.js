@@ -66,3 +66,32 @@ export async function deleteFiatitem({ type, id }) {
 
   return { data, supabaseTable };
 }
+
+export async function addFiatitem({
+  moneyAction,
+  actionName,
+  value,
+  date,
+  category = "",
+}) {
+  console.log(moneyAction, actionName, value, date, category);
+  let newValue = {};
+
+  if (actionName === "income") {
+    newValue = { ...newValue, income: value, date, category };
+  }
+  if (actionName === "outcome") {
+    newValue = { ...newValue, outcome: value, date, category };
+  }
+  if (actionName === "saved") {
+    newValue = { ...newValue, saved: value, date };
+  }
+  const { data, error } = await supabase
+    .from(`${moneyAction}`)
+    .insert([newValue])
+    .select();
+
+  if (error) throw new Error(error.message);
+
+  return { data, moneyAction };
+}

@@ -1,13 +1,12 @@
 import styled, { css } from "styled-components";
-
 import { HiPencil, HiTrash } from "react-icons/hi2";
-import Modal from "./../../ui/Modal";
-import Table from "./../../ui/Table";
-import { formatCurrency, getROI } from "./../../utils/utils";
+import Modal from "../../ui/Modal";
+import Table from "../../ui/Table";
+import { formatCurrency, getROI } from "../../utils/utils";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteCoin } from "./useDeleteCoin";
 import ButtonIcon from "../../ui/ButtonIcon";
-import EditCoinForm from "./EditCoinForm";
+import EditCoinForm from "./CryptoEditForm";
 
 const Coin = styled.div`
   font-size: 1.8rem;

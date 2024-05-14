@@ -1,6 +1,37 @@
+// import styled from "styled-components";
+// import React from "react";
+
+// const StyledSelect = styled.select`
+//   font-size: 1.4rem;
+//   padding: 0.8rem 1.2rem;
+//   border: 1px solid
+//     ${(props) =>
+//       props.type === "white"
+//         ? "var(--color-grey-100)"
+//         : "var(--color-grey-300)"};
+//   border-radius: var(--border-radius-sm);
+//   background-color: var(--color-grey-0);
+//   font-weight: 500;
+//   box-shadow: var(--shadow-sm);
+// `;
+
+// const Select = React.forwardRef(({ options, onChange, value, type }, ref) => {
+//   return (
+//     <StyledSelect ref={ref} onChange={onChange} value={value} type={type}>
+//       {options.map((item) => (
+//         <option value={item.value} key={item.value}>
+//           {item.label}
+//         </option>
+//       ))}
+//     </StyledSelect>
+//   );
+// });
+
+// export default Select;
+
 import styled from "styled-components";
 
-const StyledSelect = styled.select`
+export const StyledSelect = styled.select`
   font-size: 1.4rem;
   padding: 0.8rem 1.2rem;
   border: 1px solid
@@ -14,16 +45,16 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
-function Select({ innerRef }) {
-  return (
-    <StyledSelect type="white">
-      {innerRef.map((coin) => (
-        <option value={coin.coinName} key={coin.id}>
-          {coin.coinName}
-        </option>
-      ))}
-    </StyledSelect>
-  );
-}
+// function Select({ options, value, onChange, ...props }) {
+//   return (
+//     <StyledSelect onChange={onChange} value={value} {...props}>
+//       {options.map((option) => (
+//         <option key={option.value} value={option.value}>
+//           {option.label}
+//         </option>
+//       ))}
+//     </StyledSelect>
+//   );
+// }
 
-export default Select;
+// export default Select;

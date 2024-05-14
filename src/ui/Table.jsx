@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { getROI } from "../utils/utils";
+import { Empty } from "./Empty";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -55,13 +56,6 @@ const Footer = styled.footer`
   &:not(:has(*)) {
     display: none;
   }
-`;
-
-const Empty = styled.p`
-  font-size: 1.6rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 2.4rem;
 `;
 
 const TableContext = createContext();

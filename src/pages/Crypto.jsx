@@ -1,10 +1,10 @@
 import CryptoSummary from "../features/crypto/CryptoSummary";
-import CoinsList from "../features/crypto/CoinsList";
+import CoinsList from "../features/crypto/CryptoList";
 import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import styled from "styled-components";
 import Modal from "../ui/Modal";
-import AddCoinForm from "../features/crypto/AddCoinForm";
+import AddCoinForm from "../features/crypto/CryptoAddForm";
 import { useCryptoList } from "../features/crypto/useCryptoBalance";
 import { useUpdateCrypto } from "../features/crypto/useUpdateCryptoRates";
 import { useState } from "react";

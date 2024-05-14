@@ -5,6 +5,7 @@ import { useTotalIncome } from "./useTotalIncome";
 
 function FiatIncome() {
   const { fiatIncome, isLoadingIncome } = useTotalIncome();
+
   if (isLoadingIncome) return <Spinner />;
 
   const { fiatIncomes } = fiatIncome;

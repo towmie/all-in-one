@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import Tabs from "../../ui/Tabs";
 import Button from "../../ui/Button";
+import Modal from "../../ui/Modal";
 import { NavLink } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
+import FiatAddForm from "./FiatAddForm";
 
 const StyledFiatMenu = styled.div`
   display: flex;
@@ -53,15 +55,17 @@ function FiatMenu() {
       </MenuContainer>
 
       <MenuContainer>
-        <Button size="medium" variations="primary">
-          Add new income
-        </Button>
-        <Button size="medium" variations="secondary">
-          Add new outcome
-        </Button>
-        <Button size="medium" variations="link">
-          Add new savings
-        </Button>
+        <Modal>
+          <Modal.Open opens="add-fiat-form">
+            <Button size="medium" variations="link">
+              <FaPlus />
+              <span> Add new</span>
+            </Button>
+          </Modal.Open>
+          <Modal.Window name="add-fiat-form">
+            <FiatAddForm />
+          </Modal.Window>
+        </Modal>
       </MenuContainer>
     </StyledFiatMenu>
   );

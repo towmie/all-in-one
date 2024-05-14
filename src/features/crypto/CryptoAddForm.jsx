@@ -22,7 +22,6 @@ function AddCoinForm({ onCloseModal }) {
         },
       }
     );
-    reset();
   }
 
   if (isUpdating) return <Spinner />;

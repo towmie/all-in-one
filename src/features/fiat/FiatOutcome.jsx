@@ -5,9 +5,10 @@ import { useTotalOutcome } from "./useTotalOutcome";
 
 function FiatOutcome() {
   const { fiatOutcome, isLoadingOutcome } = useTotalOutcome();
-  const { fiatOutcomes } = fiatOutcome;
 
   if (isLoadingOutcome) return <Spinner />;
+
+  const { fiatOutcomes } = fiatOutcome;
 
   return (
     <Table columns="2.4rem 1fr 1fr 1fr 7rem">

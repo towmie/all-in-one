@@ -3,6 +3,7 @@ import CardItem from "../../ui/CardItem";
 import { useTotalIncome } from "./useTotalIncome";
 import Spinner from "./../../ui/Spinner";
 import Heading from "./../../ui/Heading";
+import { Empty } from "./../../ui/Empty";
 import { useTotalOutcome } from "./useTotalOutcome";
 import { formatCurrency } from "./../../utils/utils";
 import { useTotalSaved } from "./useTotalSaved";
@@ -42,10 +43,7 @@ function FiatSummary() {
                   {formatCurrency(totalOutcome)}
                 </Heading>
               ) : (
-                <Heading>
-                  <small></small>
-                  No outcome in this month
-                </Heading>
+                <small>No outcome in this month</small>
               )}
             </div>
           </CardItem>
@@ -67,7 +65,7 @@ function FiatSummary() {
           </CardItem>
         </Cardlist>
       ) : (
-        <Heading as="h1">No data</Heading>
+        <Empty>No data to show at the moment</Empty>
       )}
     </>
   );

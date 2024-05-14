@@ -1,6 +1,6 @@
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import Table, { Cell, StyledSort } from "../../ui/Table";
-import CoinRow from "./CoinRow";
+import CoinRow from "./CryptoRow";
 import { useSearchParams } from "react-router-dom";
 import Menus from "../../ui/Menus";
 
