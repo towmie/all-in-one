@@ -2,9 +2,28 @@ import { useForm } from "react-hook-form";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import { StyledSelect } from "../../ui/Select";
 import Button from "../../ui/Button";
 import { useAddFiat } from "./useAddFiat";
+import styled from "styled-components";
+import {
+  INCOME_OPTIONS,
+  MONEY_TRANSACTION,
+  OUTCOME_OPTIONS,
+} from "../../services/constants";
+
+const StyledSelect = styled.select`
+  font-size: 1.4rem;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid
+    ${(props) =>
+      props.type === "white"
+        ? "var(--color-grey-100)"
+        : "var(--color-grey-300)"};
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-grey-0);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+`;
 
 function FiatAddForm({ onCloseModal }) {
   const { register, handleSubmit, watch, reset, formState } = useForm();
@@ -13,35 +32,7 @@ function FiatAddForm({ onCloseModal }) {
 
   const selectedMoneyTransaction = watch("moneyAction") || "fiatIncome";
 
-  const moneyTransaction = [
-    { value: "fiatIncome", label: "Add new Income" },
-    { value: "fiatOutcome", label: "Add new Outcome" },
-    { value: "saved", label: "Add new Savings" },
-  ];
-
-  const incomeOptions = [
-    { value: "salary", label: "Salary" },
-    { value: "side", label: "Side Hustle" },
-    { value: "other", label: "Other" },
-  ];
-
-  const outcomeOptions = [
-    { value: "entertainment", label: "Entertainment" },
-    { value: "food", label: "Food" },
-    { value: "family", label: "Family" },
-    { value: "sport", label: "Sport" },
-    { value: "gifts", label: "Gifts" },
-    { value: "beauty", label: "Beauty" },
-    { value: "house", label: "House" },
-    { value: "transport", label: "Transport" },
-    { value: "health", label: "Health" },
-    { value: "education", label: "Education" },
-    { value: "taxes", label: "Taxes" },
-    { value: "restaurants", label: "Restaurants" },
-  ];
-
   function onHandleSubmit(data) {
-    console.log(data);
     let actionName;
     if (data.moneyAction === "fiatIncome") actionName = "income";
     if (data.moneyAction === "fiatOutcome") actionName = "outcome";
@@ -66,7 +57,7 @@ function FiatAddForm({ onCloseModal }) {
           defaultValue="fiatIncome"
           {...register("moneyAction", { required: "This field is required" })}
         >
-          {moneyTransaction.map((option) => (
+          {MONEY_TRANSACTION.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -101,14 +92,14 @@ function FiatAddForm({ onCloseModal }) {
             })}
           >
             {selectedMoneyTransaction === "fiatIncome" &&
-              incomeOptions.map((option) => (
-                <option key={option.value} value={option.label}>
+              INCOME_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             {selectedMoneyTransaction === "fiatOutcome" &&
-              outcomeOptions.map((option) => (
-                <option key={option.value} value={option.label}>
+              OUTCOME_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}

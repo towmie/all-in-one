@@ -1,31 +1,46 @@
+import { INCOME_OPTIONS } from "../../services/constants";
+import { FilterContainer } from "../../ui/FilterContainer";
+import Pagination from "../../ui/Pagination";
+import SortBy from "../../ui/SortBy";
 import Spinner from "../../ui/Spinner";
 import Table, { Cell } from "../../ui/Table";
 import FiatRow from "./FiatRow";
-import { useTotalIncome } from "./useTotalIncome";
+import { useIncome } from "./useIncome";
 
 function FiatIncome() {
-  const { fiatIncome, isLoadingIncome } = useTotalIncome();
+  const { fiatIncome, isLoadingIncome } = useIncome();
 
   if (isLoadingIncome) return <Spinner />;
 
-  const { fiatIncomes } = fiatIncome;
-
   return (
-    <Table columns="2.4rem 1fr 1fr 1fr 7rem">
-      <Table.Header>
-        <Cell>Nº</Cell>
-        <Cell>Income $</Cell>
-        <Cell>Date</Cell>
-        <Cell>Category</Cell>
-        <Cell></Cell>
-      </Table.Header>
-      <Table.Body
-        data={fiatIncomes}
-        render={(income, i) => (
-          <FiatRow fiatItem={income} index={i} key={income.id} type="income" />
-        )}
-      />
-    </Table>
+    <>
+      <FilterContainer>
+        <SortBy options={[{ value: "all", label: "All" }, ...INCOME_OPTIONS]} />
+      </FilterContainer>
+      <Table columns="2.4rem 1fr 1fr 1fr 7rem">
+        <Table.Header>
+          <Cell>Nº</Cell>
+          <Cell>Income $</Cell>
+          <Cell>Date</Cell>
+          <Cell>Category</Cell>
+          <Cell></Cell>
+        </Table.Header>
+        <Table.Body
+          data={fiatIncome}
+          render={(income, i) => (
+            <FiatRow
+              fiatItem={income}
+              index={i}
+              key={income.id}
+              type="income"
+            />
+          )}
+        />
+        <Table.Footer>
+          <Pagination count={fiatIncome.length} />
+        </Table.Footer>
+      </Table>
+    </>
   );
 }
 

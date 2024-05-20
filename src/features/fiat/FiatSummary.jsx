@@ -1,25 +1,28 @@
 import { Cardlist } from "../../ui/CardList";
 import CardItem from "../../ui/CardItem";
-import { useTotalIncome } from "./useTotalIncome";
 import Spinner from "./../../ui/Spinner";
 import Heading from "./../../ui/Heading";
 import { Empty } from "./../../ui/Empty";
-import { useTotalOutcome } from "./useTotalOutcome";
 import { formatCurrency } from "./../../utils/utils";
-import { useTotalSaved } from "./useTotalSaved";
+import { useTotalsummary } from "./useTotalsummary";
 
 function FiatSummary() {
-  const { fiatIncome, isLoadingIncome } = useTotalIncome();
-  const { fiatOutcome, isLoadingOutcome } = useTotalOutcome();
-  const { saved, isLoadingSaved } = useTotalSaved();
+  const { totalSummary, isLoadingSummary } = useTotalsummary();
 
-  const isWorking = isLoadingIncome || isLoadingOutcome || isLoadingSaved;
+  if (isLoadingSummary) return <Spinner />;
 
-  if (isWorking) return <Spinner />;
-
-  const { totalIncome } = fiatIncome;
-  const { totalOutcome } = fiatOutcome;
-  const { totalSaved } = saved;
+  const totalIncome = totalSummary.fiatIncome.reduce(
+    (acc, cur) => cur.income + acc,
+    0
+  );
+  const totalOutcome = totalSummary.fiatOutcome.reduce(
+    (acc, cur) => cur.outcome + acc,
+    0
+  );
+  const totalSaved = totalSummary.fiatSaved.reduce(
+    (acc, cur) => cur.saved + acc,
+    0
+  );
 
   return (
     <>

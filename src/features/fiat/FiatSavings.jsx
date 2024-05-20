@@ -1,14 +1,12 @@
 import Spinner from "../../ui/Spinner";
 import Table, { Cell } from "../../ui/Table";
 import FiatRow from "./FiatRow";
-import { useTotalSaved } from "./useTotalSaved";
+import { useSaved } from "./useSaved";
 
 function FiatSavings() {
-  const { saved: savedList, isLoadingSaved } = useTotalSaved();
+  const { saved, isLoadingSaved } = useSaved();
 
   if (isLoadingSaved) return <Spinner />;
-
-  const { saved } = savedList;
 
   return (
     <Table columns="2.4rem 1fr 1fr 8rem">

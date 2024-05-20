@@ -1,37 +1,68 @@
+import { PAGE_SIZE } from "./constants";
 import supabase from "./supabase";
 
-export async function getFiatIncome() {
-  let { data: fiatIncomes, error } = await supabase
+export async function getTotoalSummary() {
+  const { data: fiatIncome, error: incomeError } = await supabase
     .from("fiatIncome")
     .select("*");
-
-  if (error) throw new Error(error.message);
-
-  const totalIncome = fiatIncomes.reduce((acc, cur) => cur.income + acc, 0);
-
-  return { fiatIncomes, totalIncome };
-}
-
-export async function getFiatOutcome() {
-  let { data: fiatOutcomes, error } = await supabase
+  const { data: fiatOutcome, error: outcomeError } = await supabase
     .from("fiatOutcome")
     .select("*");
+  const { data: fiatSaved, error: savedError } = await supabase
+    .from("saved")
+    .select("*");
+
+  if (incomeError || outcomeError || savedError)
+    throw new Error("Could not load data");
+
+  return { fiatIncome, fiatOutcome, fiatSaved };
+}
+
+export async function getFiatIncome({ filter, page }) {
+  let query = supabase.from("fiatIncome").select("*");
+
+  if (filter && filter.value !== "all") {
+    query = query[filter.method || "eq"](filter.field, filter.value);
+  }
+
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    query = query.range(from, to);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw new Error(error.message);
 
-  const totalOutcome = fiatOutcomes.reduce((acc, cur) => cur.outcome + acc, 0);
+  return data;
+}
 
-  return { fiatOutcomes, totalOutcome };
+export async function getFiatOutcome({ filter, page }) {
+  let query = supabase.from("fiatOutcome").select("*");
+
+  if (filter && filter.value !== "all") {
+    query = query[filter.method || "eq"](filter.field, filter.value);
+  }
+
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    query = query.range(from, to);
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 export async function getSaved() {
-  let { data: saved, error } = await supabase.from("saved").select("*");
+  let { data, error } = await supabase.from("saved").select("*");
 
   if (error) throw new Error(error.message);
 
-  const totalSaved = saved.reduce((acc, cur) => cur.saved + acc, 0);
-
-  return { saved, totalSaved };
+  return data;
 }
 
 export async function updateFiatItem({ data, id, type }) {
@@ -74,7 +105,6 @@ export async function addFiatitem({
   date,
   category = "",
 }) {
-  console.log(moneyAction, actionName, value, date, category);
   let newValue = {};
 
   if (actionName === "income") {

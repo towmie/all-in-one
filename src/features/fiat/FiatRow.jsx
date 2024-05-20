@@ -52,7 +52,9 @@ function FiatRow({ fiatItem, type, index }) {
       <div>{index + 1}</div>
       <div>{formatCurrency(itemObj.item)}</div>
       <div>{format(new Date(itemObj.date), "MMM dd yyyy")}</div>
-      {type !== "saved" && <div>{itemObj.category}</div>}
+      {type !== "saved" && (
+        <div>{itemObj.category.replace("_", " ").toUpperCase()}</div>
+      )}
 
       <MenuCell>
         <Modal>
