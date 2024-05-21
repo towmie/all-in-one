@@ -19,7 +19,7 @@ export async function getTotoalSummary() {
 }
 
 export async function getFiatIncome({ filter, page }) {
-  let query = supabase.from("fiatIncome").select("*");
+  let query = supabase.from("fiatIncome").select("*", { count: "exact" });
 
   if (filter && filter.value !== "all") {
     query = query[filter.method || "eq"](filter.field, filter.value);
@@ -28,18 +28,18 @@ export async function getFiatIncome({ filter, page }) {
   if (page) {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
+
     query = query.range(from, to);
   }
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) throw new Error(error.message);
-
-  return data;
+  return { data, count };
 }
 
 export async function getFiatOutcome({ filter, page }) {
-  let query = supabase.from("fiatOutcome").select("*");
+  let query = supabase.from("fiatOutcome").select("*", { count: "exact" });
 
   if (filter && filter.value !== "all") {
     query = query[filter.method || "eq"](filter.field, filter.value);
@@ -48,13 +48,14 @@ export async function getFiatOutcome({ filter, page }) {
   if (page) {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
+
     query = query.range(from, to);
   }
 
-  const { data, error } = await query;
-  if (error) throw new Error(error.message);
+  const { data, error, count } = await query;
 
-  return data;
+  if (error) throw new Error(error.message);
+  return { data, count };
 }
 
 export async function getSaved() {

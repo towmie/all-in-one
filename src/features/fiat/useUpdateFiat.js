@@ -9,7 +9,7 @@ export function useUpdateFiat() {
     mutationFn: (value) => updateFiatItem(value),
     onSuccess: ({ supabaseTable }) => {
       queryClient.invalidateQueries({
-        queryKey: [`${supabaseTable}`],
+        queryKey: [`${supabaseTable}`, "summary"],
       });
       toast.success("Data successfully updated");
     },

@@ -8,8 +8,11 @@ export function useAddFiat() {
   const { mutate: addNewFiat, isLoading: isAddingNewFiat } = useMutation({
     mutationFn: (newValue) => addFiatitem(newValue),
     onSuccess: ({ moneyAction }) => {
-      queryClient.invalidateQueries({
-        queryKey: [`${moneyAction}`],
+      const queryArray = ["summary", `${moneyAction}`];
+      queryArray.forEach((el) => {
+        queryClient.invalidateQueries({
+          queryKey: [`${el}`],
+        });
       });
       toast.success("Data successfully updated");
     },

@@ -1,6 +1,6 @@
 import { OUTCOME_OPTIONS } from "../../services/constants";
 import { FilterContainer } from "../../ui/FilterContainer";
-import SortBy from "../../ui/SortBy";
+import FilterBy from "../../ui/FilterBy";
 import Spinner from "../../ui/Spinner";
 import Table, { Cell } from "../../ui/Table";
 import FiatRow from "./FiatRow";
@@ -14,7 +14,7 @@ function FiatOutcome() {
   return (
     <>
       <FilterContainer>
-        <SortBy
+        <FilterBy
           options={[{ value: "all", label: "All" }, ...OUTCOME_OPTIONS]}
         />
       </FilterContainer>

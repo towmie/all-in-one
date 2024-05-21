@@ -11,18 +11,12 @@ function FiatSummary() {
 
   if (isLoadingSummary) return <Spinner />;
 
-  const totalIncome = totalSummary.fiatIncome.reduce(
-    (acc, cur) => cur.income + acc,
-    0
-  );
-  const totalOutcome = totalSummary.fiatOutcome.reduce(
-    (acc, cur) => cur.outcome + acc,
-    0
-  );
-  const totalSaved = totalSummary.fiatSaved.reduce(
-    (acc, cur) => cur.saved + acc,
-    0
-  );
+  const { fiatIncome, fiatOutcome, fiatSaved } = totalSummary;
+  const totalIncome =
+    fiatIncome?.reduce((acc, cur) => cur.income + acc, 0) || 0;
+  const totalOutcome =
+    fiatOutcome?.reduce((acc, cur) => cur.outcome + acc, 0) || 0;
+  const totalSaved = fiatSaved?.reduce((acc, cur) => cur.saved + acc, 0) || 0;
 
   return (
     <>
@@ -56,7 +50,7 @@ function FiatSummary() {
               <Heading
                 roi={totalIncome - totalOutcome > 0 ? "positive" : "negative"}
               >
-                {formatCurrency(totalIncome - totalOutcome)}
+                {formatCurrency(totalIncome - totalOutcome + totalSaved)}
               </Heading>
             </div>
           </CardItem>

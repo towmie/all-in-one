@@ -3,16 +3,16 @@ import Select from "./Select";
 
 function SortBy({ options }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortBy = searchParams.get("sortBy") || "";
+  const filterBy = searchParams.get("filterBy") || "";
 
   function handleChange(e) {
-    searchParams.set("sortBy", e.target.value);
+    searchParams.set("filterBy", e.target.value);
     setSearchParams(searchParams);
   }
 
   return (
     <Select
-      value={sortBy}
+      value={filterBy}
       options={options}
       type="white"
       onChange={handleChange}

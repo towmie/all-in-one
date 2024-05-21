@@ -8,7 +8,7 @@ export function useDeleteFiat() {
     mutationFn: (value) => deleteFiatitem(value),
     onSuccess: ({ supabaseTable }) => {
       queryClient.invalidateQueries({
-        queryKey: [`${supabaseTable}`],
+        queryKey: [`${supabaseTable}`, "summary"],
       });
       toast.success("Data successfully updated");
     },
