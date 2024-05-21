@@ -24,7 +24,7 @@ export function useOutcome() {
   });
 
   // Pre-fetching
-  const pageCount = Math.ceil(fiatOutcome?.length / PAGE_SIZE);
+  const pageCount = Math.ceil(count / PAGE_SIZE);
 
   if (page < pageCount)
     queryClient.prefetchQuery({

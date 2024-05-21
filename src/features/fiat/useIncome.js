@@ -22,19 +22,23 @@ export function useIncome() {
     });
 
   // Pre-fetching
-  const pageCount = Math.ceil(fiatIncome?.length / PAGE_SIZE);
+  const pageCount = Math.ceil(count / PAGE_SIZE);
 
-  if (page < pageCount)
+  console.log(page, pageCount);
+
+  if (page < pageCount) {
     queryClient.prefetchQuery({
       queryKey: ["fiatIncome", filter, page + 1],
       queryFn: () => getFiatIncome({ filter, page: page + 1 }),
     });
+  }
 
-  if (page > 1)
+  if (page > 1) {
     queryClient.prefetchQuery({
       queryKey: ["fiatIncome", filter, page - 1],
       queryFn: () => getFiatIncome({ filter, page: page - 1 }),
     });
+  }
 
   return { fiatIncome, isLoadingIncome, count };
 }

@@ -27,4 +27,4 @@ export const OUTCOME_OPTIONS = [
   { value: "to_crypto", label: "To Crypto" },
 ];
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 5;

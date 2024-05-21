@@ -19,7 +19,12 @@ export async function getTotoalSummary() {
 }
 
 export async function getFiatIncome({ filter, page }) {
-  let query = supabase.from("fiatIncome").select("*", { count: "exact" });
+  let query = supabase
+    .from("fiatIncome")
+    .select("*", { count: "exact" })
+    .order("date", {
+      ascending: false,
+    });
 
   if (filter && filter.value !== "all") {
     query = query[filter.method || "eq"](filter.field, filter.value);
@@ -35,11 +40,17 @@ export async function getFiatIncome({ filter, page }) {
   const { data, error, count } = await query;
 
   if (error) throw new Error(error.message);
+
   return { data, count };
 }
 
 export async function getFiatOutcome({ filter, page }) {
-  let query = supabase.from("fiatOutcome").select("*", { count: "exact" });
+  let query = supabase
+    .from("fiatOutcome")
+    .select("*", { count: "exact" })
+    .order("date", {
+      ascending: false,
+    });
 
   if (filter && filter.value !== "all") {
     query = query[filter.method || "eq"](filter.field, filter.value);
@@ -59,7 +70,9 @@ export async function getFiatOutcome({ filter, page }) {
 }
 
 export async function getSaved() {
-  let { data, error } = await supabase.from("saved").select("*");
+  let { data, error } = await supabase.from("saved").select("*").order("date", {
+    ascending: false,
+  });
 
   if (error) throw new Error(error.message);
 
