@@ -2,16 +2,76 @@ import { getToday } from "../utils/utils";
 import { PAGE_SIZE } from "./constants";
 import supabase from "./supabase";
 
-export async function getTotoalSummary() {
+export async function getFirstDate() {
+  let incomeFirstDate;
+  let outcomeFirstDate;
+  let savedFirstDate;
+
   const { data: fiatIncome, error: incomeError } = await supabase
     .from("fiatIncome")
-    .select("*");
+    .select("date")
+    .order("date", { ascending: true })
+    .limit(1);
+
+  if (fiatIncome.length > 0) {
+    incomeFirstDate = fiatIncome[0].date;
+  } else {
+    console.log("No data found in the table");
+    return null;
+  }
+
   const { data: fiatOutcome, error: outcomeError } = await supabase
     .from("fiatOutcome")
-    .select("*");
+    .select("date")
+    .order("date", { ascending: true })
+    .limit(1);
+
+  if (fiatOutcome.length > 0) {
+    outcomeFirstDate = fiatOutcome[0].date;
+  } else {
+    console.log("No data found in the table");
+    return null;
+  }
+
   const { data: fiatSaved, error: savedError } = await supabase
     .from("saved")
-    .select("*");
+    .select("date")
+    .order("date", { ascending: true })
+    .limit(1);
+
+  if (fiatSaved.length > 0) {
+    savedFirstDate = fiatSaved[0].date;
+  } else {
+    console.log("No data found in the table");
+    return null;
+  }
+
+  if (incomeError || outcomeError || savedError)
+    throw new Error("Could not load data");
+
+  return { incomeFirstDate, outcomeFirstDate, savedFirstDate };
+}
+
+export async function getTotoalSummary({ filterDate }) {
+  let incomeQuery = supabase.from("fiatIncome").select("*");
+  let outcomeQuery = supabase.from("fiatOutcome").select("*");
+  let savedQuery = supabase.from("saved").select("*");
+
+  if (filterDate && filterDate.value !== "all") {
+    incomeQuery
+      .gte("date", filterDate.value)
+      .lte("date", getToday({ end: true }));
+    outcomeQuery
+      .gte("date", filterDate.value)
+      .lte("date", getToday({ end: true }));
+    savedQuery
+      .gte("date", filterDate.value)
+      .lte("date", getToday({ end: true }));
+  }
+
+  const { data: fiatIncome, error: incomeError } = await incomeQuery;
+  const { data: fiatOutcome, error: outcomeError } = await outcomeQuery;
+  const { data: fiatSaved, error: savedError } = await savedQuery;
 
   if (incomeError || outcomeError || savedError)
     throw new Error("Could not load data");

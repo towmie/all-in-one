@@ -11,10 +11,10 @@ function FiatOverview() {
         <FilterTab
           filterField="last"
           options={[
-            { value: "all", label: "All" },
             { value: "month", label: "This Month" },
             { value: "three-month", label: "Last 3 Months" },
             { value: "year", label: "This Year" },
+            { value: "all", label: "All" },
           ]}
         />
       </FilterContainer>
