@@ -7,9 +7,14 @@ export function useDeleteFiat() {
   const { mutate: deleteFiat, isLoading: isDeleting } = useMutation({
     mutationFn: (value) => deleteFiatitem(value),
     onSuccess: ({ supabaseTable }) => {
-      queryClient.invalidateQueries({
-        queryKey: [`${supabaseTable}`, "summary"],
+      const queryArray = ["summary", `${supabaseTable}`];
+
+      queryArray.forEach((el) => {
+        queryClient.invalidateQueries({
+          queryKey: [`${el}`],
+        });
       });
+
       toast.success("Data successfully updated");
     },
     onError: (error) => toast.error(error.message),

@@ -8,8 +8,11 @@ export function useUpdateFiat() {
   const { mutate: updateFiat, isLoading: isLoadingUpdate } = useMutation({
     mutationFn: (value) => updateFiatItem(value),
     onSuccess: ({ supabaseTable }) => {
-      queryClient.invalidateQueries({
-        queryKey: [`${supabaseTable}`, "summary"],
+      const queryArray = ["summary", `${supabaseTable}`];
+      queryArray.forEach((el) => {
+        queryClient.invalidateQueries({
+          queryKey: [`${el}`],
+        });
       });
       toast.success("Data successfully updated");
     },

@@ -1,3 +1,4 @@
+import { getToday } from "../utils/utils";
 import { PAGE_SIZE } from "./constants";
 import supabase from "./supabase";
 
@@ -18,13 +19,19 @@ export async function getTotoalSummary() {
   return { fiatIncome, fiatOutcome, fiatSaved };
 }
 
-export async function getFiatIncome({ filter, page }) {
+export async function getFiatIncome({ filter, filterDate, page }) {
   let query = supabase
     .from("fiatIncome")
     .select("*", { count: "exact" })
     .order("date", {
       ascending: false,
     });
+
+  if (filterDate && filterDate.value !== "all") {
+    query = query
+      .gte("date", filterDate.value)
+      .lte("date", getToday({ end: true }));
+  }
 
   if (filter && filter.value !== "all") {
     query = query[filter.method || "eq"](filter.field, filter.value);
