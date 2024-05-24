@@ -11,6 +11,7 @@ import FiatOverview from "./features/fiat/FiatOverview";
 import FiatIncome from "./features/fiat/FiatIncome";
 import FiatOutcome from "./features/fiat/FiatOutcome";
 import FiatSavings from "./features/fiat/FiatSavings";
+import Projects from "./pages/Projects";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,7 @@ function App() {
               <Route path="outcome" element={<FiatOutcome />} />
               <Route path="saved" element={<FiatSavings />} />
             </Route>
+            <Route path="projects" element={<Projects />} />
           </Route>
         </Routes>
       </BrowserRouter>
