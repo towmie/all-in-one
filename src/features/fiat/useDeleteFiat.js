@@ -15,7 +15,7 @@ export function useDeleteFiat() {
         });
       });
 
-      toast.success("Data successfully updated");
+      toast.success("Data successfully deleted");
     },
     onError: (error) => toast.error(error.message),
   });

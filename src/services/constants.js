@@ -28,3 +28,6 @@ export const OUTCOME_OPTIONS = [
 ];
 
 export const PAGE_SIZE = 5;
+
+export const UNSPLASH_URL = "https://api.unsplash.com";
+export const UNSPLASH_KEY = "A6rrz2uWvLTCv663lSJpdS2QP4l_AqhXkhOuhawGat4";

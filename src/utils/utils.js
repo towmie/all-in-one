@@ -1,4 +1,5 @@
 import { coinsChartColors } from "../services/CoinsChartColors";
+import { UNSPLASH_KEY, UNSPLASH_URL } from "../services/constants";
 
 export default function prepareArray(data) {
   if (!data) return;
@@ -40,3 +41,22 @@ export const getToday = function (options = {}) {
   else today.setUTCHours(0, 0, 0, 0);
   return today.toISOString();
 };
+
+export async function getProjectBg(name) {
+  try {
+    const data = await fetch(
+      `${UNSPLASH_URL}/search/photos?query=${name}&client_id=${UNSPLASH_KEY}`
+    );
+    const res = await data.json();
+    const url = res.results[0].urls.regular;
+    return url;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export function getRandomHexColor() {
+  const randomInt = Math.floor(Math.random() * 16777215);
+  const hexColor = randomInt.toString(16).padStart(6, "0");
+  return `#${hexColor}`;
+}

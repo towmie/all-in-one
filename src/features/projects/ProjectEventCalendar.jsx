@@ -29,15 +29,36 @@ const DaysNames = styled.div`
 const StyledDay = styled.div`
   border: 1px solid var(--color-brand-900);
   border-radius: var(--border-radius-md);
-  text-align: center;
-  padding: 1.6rem;
+  padding: 1rem;
 
   ${(props) =>
-    props.isToday &&
+    props.today === "true" &&
     css`
       background-color: #000;
       color: #fff;
     `}
+
+  ${(props) =>
+    props.empty &&
+    css`
+      background-color: #ccc;
+      color: #000;
+    `}
+`;
+
+const StyledEvents = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1.6rem;
+`;
+
+const StyledEvent = styled.div`
+  text-align: center;
+  background-color: var(--color-brand-800);
+  color: var(--color-brand-50);
+  border-radius: var(--border-radius-md);
+  padding: 0.4rem 0.8rem;
 `;
 
 const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -74,18 +95,20 @@ function ProjectEventCalendar({ events }) {
           <DaysNames key={day}>{day}</DaysNames>
         ))}
         {Array.from({ length: startDayIndex }).map((_, i) => (
-          <StyledDay key={`empty-${i}`}></StyledDay>
+          <StyledDay empty="true" key={`empty-${i}`}></StyledDay>
         ))}
         {daysOfMonth.map((day, i) => {
           const dateKey = format(day, "yyyy-MM-dd");
           const todaysEvents = eventsByDate[dateKey] || [];
 
           return (
-            <StyledDay isToday={isToday(day)} key={i}>
+            <StyledDay today={isToday(day) ? "true" : "false"} key={i}>
               {format(day, "d")}
-              {todaysEvents.map((event) => (
-                <div key={event.title}>{event.title}</div>
-              ))}
+              <StyledEvents>
+                {todaysEvents.map((event) => (
+                  <StyledEvent key={event.title}>{event.title}</StyledEvent>
+                ))}
+              </StyledEvents>
             </StyledDay>
           );
         })}

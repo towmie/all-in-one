@@ -59,7 +59,7 @@ function FiatMenu() {
           <Modal.Open opens="add-fiat-form">
             <Button size="medium" variations="link">
               <FaPlus />
-              <span> Add new</span>
+              <span>Add new</span>
             </Button>
           </Modal.Open>
           <Modal.Window name="add-fiat-form">
