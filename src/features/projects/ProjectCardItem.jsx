@@ -11,9 +11,9 @@ const ProjectItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
   position: relative;
   border-radius: var(--border-radius-lg);
-  overflow: hidden;
   background-image: url(${(props) => props.bg});
   background-position: center;
   background-size: cover;
