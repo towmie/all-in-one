@@ -3,28 +3,25 @@ import { formatDate } from "../../../utils/utils";
 import EventModal from "./EventModal";
 import { useState } from "react";
 import { cc } from "../../../utils/utils";
-import { useEvents } from "./useEvents";
+// import { useEvents } from "./useEvents";
 
 export default function CalendarEvents({ event }) {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const { updateEvent, deleteEvent } = useEvents();
+  // const { updateEvent, deleteEvent } = useEvents();
+
   return (
     <>
       <button
         onClick={() => setEditModalOpen(true)}
-        className={cc("event", event.color, event.allDays && "all-day-event")}
+        className={cc("event", event.color, event.allDay && "all-day-event")}
       >
-        {event.allDays ? (
-          <div className="event-name">{event.name}</div>
+        {event.allDay ? (
+          <div className="event-name">{event.title}</div>
         ) : (
           <>
             <div className={`color-dot ${event.color}`}></div>
-            <div className="event-time">
-              {formatDate(parse(event.startTime, "HH:mm", event.date), {
-                timeStyle: "short",
-              })}
-            </div>
-            <div className="event-name">{event.name}</div>
+            <div className="event-time">{event.startTime.slice(0, -3)}</div>
+            <div className="event-name">{event.title}</div>
           </>
         )}
       </button>
@@ -32,8 +29,8 @@ export default function CalendarEvents({ event }) {
         event={event}
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
-        onSubmit={(e) => updateEvent(e, event.id)}
-        onDelete={() => deleteEvent(event.id)}
+        // onSubmit={(e) => updateEvent(e, event.id)}
+        // onDelete={() => deleteEvent(event.id)}
       />
     </>
   );

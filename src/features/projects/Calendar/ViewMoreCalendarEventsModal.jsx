@@ -9,7 +9,7 @@ export default function ViewMoreCalendarEventsModal({ events, ...modalProps }) {
   return (
     <Modal {...modalProps}>
       <div className="modal-title">
-        <small>{formatDate(events[0].date, { dateStyle: "short" })}</small>
+        {/* <small>{formatDate(events[0].date, { dateStyle: "short" })}</small> */}
         <button className="close-btn" onClick={modalProps.onClose}>
           &times;
         </button>

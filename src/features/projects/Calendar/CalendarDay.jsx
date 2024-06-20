@@ -5,7 +5,6 @@ import CalendarEvents from "./CalendarEvents";
 import OverflowContainer from "./OverflowContainer";
 import ViewMoreCalendarEventsModal from "./ViewMoreCalendarEventsModal";
 import { cc, formatDate } from "../../../utils/utils";
-import { useEvents } from "./useEvents";
 
 export default function CalendarDay({
   day,
@@ -15,7 +14,6 @@ export default function CalendarDay({
 }) {
   const [isNewEventModalOpen, setNewEventModalOpen] = useState(false);
   const [isViewMoreEventModalOpen, setViewMoreEventModalOpen] = useState(false);
-  const { addEvent } = useEvents();
 
   const sortedEvents = useMemo(() => {
     if (!Array.isArray(events)) {
@@ -24,11 +22,11 @@ export default function CalendarDay({
     const timeToNumber = (time) => parseFloat(time.replace(":", "."));
 
     return [...events]?.sort((a, b) => {
-      if (a.allDays && b.allDays) {
+      if (a.allDay && b.allDay) {
         return 0;
-      } else if (a.allDays) {
+      } else if (a.allDay) {
         return -1;
-      } else if (b.allDays) {
+      } else if (b.allDay) {
         return 1;
       } else {
         return timeToNumber(a.startTime) - timeToNumber(b.startTime);
@@ -87,7 +85,7 @@ export default function CalendarDay({
         date={day}
         isOpen={isNewEventModalOpen}
         onClose={() => setNewEventModalOpen(false)}
-        onSubmit={addEvent}
+        type="create"
       />
     </div>
   );

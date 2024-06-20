@@ -13,6 +13,8 @@ import CalendarDay from "./CalendarDay";
 import { formatDate } from "../../../utils/utils";
 import { useEvents } from "./useEvents";
 import "./index.css";
+import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import Spinner from "../../../ui/Spinner";
 
 export default function Calendar() {
   const [selectedMonth, setSelectedMont] = useState(new Date());
@@ -26,7 +28,9 @@ export default function Calendar() {
     });
   }, [selectedMonth]);
 
-  const { events } = useEvents();
+  const { events, isLoadingEvents } = useEvents();
+
+  if (isLoadingEvents) return <Spinner />;
 
   return (
     <div className="calendar">
@@ -39,18 +43,18 @@ export default function Calendar() {
             className="month-change-btn"
             onClick={() => setSelectedMont((m) => subMonths(m, 1))}
           >
-            &lt;
+            <FaAnglesLeft />
           </button>
+          <span className="month-title">
+            {formatDate(selectedMonth, { month: "long", year: "numeric" })}
+          </span>
           <button
             className="month-change-btn"
             onClick={() => setSelectedMont((m) => addMonths(m, 1))}
           >
-            &gt;
+            <FaAnglesRight />
           </button>
         </div>
-        <span className="month-title">
-          {formatDate(selectedMonth, { month: "long", year: "numeric" })}
-        </span>
       </div>
       <div className="days">
         {calendarDays.map((day, i) => (

@@ -3,9 +3,14 @@ import { formatDate } from "../../../utils/utils";
 
 import Modal from "./Modal";
 import { EVENTS_COLOR } from "./useEvents";
+import Button from "../../../ui/Button";
+import { FaPlus } from "react-icons/fa";
+import { useCreateEvent } from "./useCreateEvent";
+import { useProjects } from "../useProjects";
+import Spinner from "../../../ui/Spinner";
 
 export default function EventModal({
-  onSubmit,
+  type,
   onDelete,
   event,
   date,
@@ -16,21 +21,32 @@ export default function EventModal({
     event?.color || EVENTS_COLOR[0]
   );
   const isNew = event === undefined;
-  const [isAlldayChecked, setAlldayChecked] = useState(event?.allDays || false);
+  const [isAlldayChecked, setAlldayChecked] = useState(event?.allDay || false);
   const [startTime, setStartTime] = useState(event?.startTime || "");
   const endTimeRef = useRef();
   const nameRef = useRef();
+  const descriptionRef = useRef();
+  const projectIdRef = useRef();
+  const { createEvent, isPending } = useCreateEvent();
+  const { projects, isLoadingprojects } = useProjects();
+
+  const isWorking = isLoadingprojects || isPending;
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (date) console.log(date, event);
 
-    const name = nameRef.current?.value;
+    const title = nameRef.current?.value;
     const endTime = endTimeRef.current?.value;
+    const description = descriptionRef.current?.value;
+    const projectId = +projectIdRef.current?.value;
 
-    if (name === "" || name == null) return;
+    if (title === "" || title == null) return;
 
     const commonProps = {
-      name,
+      title,
+      description,
+      projectId,
       date: date || event?.date,
       color: selectedColor,
     };
@@ -38,7 +54,7 @@ export default function EventModal({
     let newEvent;
 
     if (isAlldayChecked) {
-      newEvent = { ...commonProps, allDays: true };
+      newEvent = { ...commonProps, allDay: true, startTime: "", endTime: "" };
     } else {
       if (
         startTime == null ||
@@ -48,32 +64,54 @@ export default function EventModal({
       ) {
         return;
       }
-      newEvent = { ...commonProps, allDays: false, startTime, endTime };
+      newEvent = { ...commonProps, allDay: false, startTime, endTime };
     }
     modalProps.onClose();
-    onSubmit(newEvent);
+
+    if (type === "create") createEvent(newEvent);
   }
+
+  if (isWorking) return <Spinner />;
 
   return (
     <Modal {...modalProps}>
       <div className="modal-title">
         <div>{isNew ? "Add" : "Edit"} Event</div>
-        <small>{formatDate(date || event.date, { dateStyle: "short" })}</small>
+        <small>{formatDate(date, { dateStyle: "short" })}</small>
         <button className="close-btn" onClick={modalProps.onClose}>
           &times;
         </button>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor={`${formId}-name`}>Name</label>
+          <label htmlFor={`${formId}-title`}>Title</label>
           <input
-            defaultValue={event?.name}
+            defaultValue={event?.title}
             ref={nameRef}
             type="text"
-            name="name"
-            id={`${formId}-name`}
+            name="title"
+            id={`${formId}-title`}
           />
         </div>
+        <div className="form-group">
+          <label htmlFor={`${formId}-title`}>Description</label>
+          <textarea
+            defaultValue={event?.description}
+            ref={descriptionRef}
+            name="description"
+            id={`${formId}-description`}
+          />
+        </div>
+        <div className="form-group">
+          <select name="project" id="project" ref={projectIdRef}>
+            {projects?.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.projectName}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="form-group checkbox">
           <input
             checked={isAlldayChecked}
@@ -133,13 +171,20 @@ export default function EventModal({
           </div>
         </div>
         <div className="row">
-          <button className="btn btn-success" type="submit">
+          {/* <button className="btn btn-success" type="submit">
             {isNew ? "Add" : "Edit"}
-          </button>
+          </button> */}
+          <Button size="medium" variations="link">
+            <FaPlus />
+            <span> {isNew ? " Add" : " Edit"}</span>
+          </Button>
           {onDelete !== null && (
-            <button onClick={onDelete} className="btn btn-delete" type="button">
-              Delete
-            </button>
+            // <button onClick={onDelete} className="btn btn-delete" type="button">
+            //   Delete
+            // </button>
+            <Button onClick={onDelete} size="medium" variation="danger">
+              <span> Delete</span>
+            </Button>
           )}
         </div>
       </form>
