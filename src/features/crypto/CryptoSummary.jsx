@@ -18,15 +18,6 @@ import Heading from "../../ui/Heading";
 import { Cardlist } from "../../ui/CardList";
 
 function CryptoSummary({ cryptoData }) {
-  // const [coloredData, setcoloredData] = useState("");
-
-  // useEffect(
-  //   function () {
-  //     setcoloredData(prepareArray(cryptoData));
-  //   },
-  //   [cryptoData]
-  // );
-
   const totalROI = getROI(
     getTotalCryptoBalance(cryptoData),
     getTotalCryptoSpentBalance(cryptoData)
@@ -51,10 +42,10 @@ function CryptoSummary({ cryptoData }) {
           </div>
         </CardItem>
         <CardItem type="chart">
-          {/* <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
-                data={coloredData}
+                data={cryptoData}
                 nameKey="coinName"
                 dataKey="amountInUSD"
                 innerRadius={55}
@@ -62,7 +53,7 @@ function CryptoSummary({ cryptoData }) {
                 cx="50%"
                 cy="50%"
               >
-                {coloredData?.map((entry) => (
+                {cryptoData?.map((entry) => (
                   <Cell
                     fill={entry.color}
                     stroke={entry.color}
@@ -78,7 +69,7 @@ function CryptoSummary({ cryptoData }) {
                 iconType="circle"
               />
             </PieChart>
-          </ResponsiveContainer> */}
+          </ResponsiveContainer>
         </CardItem>
         <CardItem type="total-balance">
           <div>

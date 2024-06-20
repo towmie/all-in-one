@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import supabase, { coinApiKEY } from "./supabase";
+import { getRandomHexColor } from "../utils/utils";
 
 export async function getCryptoData() {
   let { data: cryptoOverview, error } = await supabase
@@ -87,6 +88,7 @@ export async function createCoin(coin, id) {
           rate: data.rate,
           amountInUSD: data.rate * +coin.amount,
           amountSpent: +coin.spentUSD,
+          color: getRandomHexColor(),
         },
       ])
       .select();

@@ -1,16 +1,8 @@
-import { coinsChartColors } from "../services/CoinsChartColors";
 import { UNSPLASH_KEY, UNSPLASH_URL } from "../services/constants";
 
-export default function prepareArray(data) {
-  if (!data) return;
-  return data
-    .map((coin) => {
-      const { color } = coinsChartColors.find(
-        (el) => el.name === coin.coinName
-      );
-      return { ...coin, color };
-    })
-    .sort((a, b) => a - b);
+export function getRandomHexColor() {
+  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  return `#${randomColor.padStart(6, "0")}`;
 }
 
 export function getTotalCryptoBalance(data) {
@@ -53,10 +45,4 @@ export async function getProjectBg(name) {
   } catch (error) {
     throw new Error(error.message);
   }
-}
-
-export function getRandomHexColor() {
-  const randomInt = Math.floor(Math.random() * 16777215);
-  const hexColor = randomInt.toString(16).padStart(6, "0");
-  return `#${hexColor}`;
 }
