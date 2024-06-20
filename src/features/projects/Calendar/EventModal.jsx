@@ -1,0 +1,148 @@
+import { Fragment, useId, useRef, useState } from "react";
+import { formatDate } from "../../../utils/utils";
+
+import Modal from "./Modal";
+import { EVENTS_COLOR } from "./useEvents";
+
+export default function EventModal({
+  onSubmit,
+  onDelete,
+  event,
+  date,
+  ...modalProps
+}) {
+  const formId = useId();
+  const [selectedColor, setSelectedColor] = useState(
+    event?.color || EVENTS_COLOR[0]
+  );
+  const isNew = event === undefined;
+  const [isAlldayChecked, setAlldayChecked] = useState(event?.allDays || false);
+  const [startTime, setStartTime] = useState(event?.startTime || "");
+  const endTimeRef = useRef();
+  const nameRef = useRef();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const name = nameRef.current?.value;
+    const endTime = endTimeRef.current?.value;
+
+    if (name === "" || name == null) return;
+
+    const commonProps = {
+      name,
+      date: date || event?.date,
+      color: selectedColor,
+    };
+
+    let newEvent;
+
+    if (isAlldayChecked) {
+      newEvent = { ...commonProps, allDays: true };
+    } else {
+      if (
+        startTime == null ||
+        startTime === "" ||
+        endTime == null ||
+        endTime === ""
+      ) {
+        return;
+      }
+      newEvent = { ...commonProps, allDays: false, startTime, endTime };
+    }
+    modalProps.onClose();
+    onSubmit(newEvent);
+  }
+
+  return (
+    <Modal {...modalProps}>
+      <div className="modal-title">
+        <div>{isNew ? "Add" : "Edit"} Event</div>
+        <small>{formatDate(date || event.date, { dateStyle: "short" })}</small>
+        <button className="close-btn" onClick={modalProps.onClose}>
+          &times;
+        </button>
+      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor={`${formId}-name`}>Name</label>
+          <input
+            defaultValue={event?.name}
+            ref={nameRef}
+            type="text"
+            name="name"
+            id={`${formId}-name`}
+          />
+        </div>
+        <div className="form-group checkbox">
+          <input
+            checked={isAlldayChecked}
+            onChange={(e) => setAlldayChecked(e.target.checked)}
+            type="checkbox"
+            name="all-day"
+            id={`${formId}-all-day`}
+          />
+          <label htmlFor={`${formId}-all-day`}>All Day?</label>
+        </div>
+        <div className="row">
+          <div className="form-group">
+            <label htmlFor={`${formId}-start-time`}>Start Time</label>
+            <input
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required={!isAlldayChecked}
+              disabled={isAlldayChecked}
+              type="time"
+              name="start-time"
+              id={`${formId}-start-time`}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor={`${formId}-end-time`}>End Time</label>
+            <input
+              ref={endTimeRef}
+              defaultValue={event?.endTime}
+              min={startTime}
+              required={!isAlldayChecked}
+              disabled={isAlldayChecked}
+              type="time"
+              name="end-time"
+              id={`${formId}-end-time`}
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Color</label>
+          <div className="row left">
+            {EVENTS_COLOR.map((color) => (
+              <Fragment key={color}>
+                <input
+                  type="radio"
+                  name="color"
+                  value={color}
+                  id={`${formId}-${color}`}
+                  checked={selectedColor === color}
+                  onChange={() => setSelectedColor(color)}
+                  className="color-radio"
+                />
+                <label htmlFor={`${formId}-${color}`}>
+                  <span className="sr-only">{color}</span>
+                </label>
+              </Fragment>
+            ))}
+          </div>
+        </div>
+        <div className="row">
+          <button className="btn btn-success" type="submit">
+            {isNew ? "Add" : "Edit"}
+          </button>
+          {onDelete !== null && (
+            <button onClick={onDelete} className="btn btn-delete" type="button">
+              Delete
+            </button>
+          )}
+        </div>
+      </form>
+    </Modal>
+  );
+}

@@ -12,6 +12,7 @@ import FiatIncome from "./features/fiat/FiatIncome";
 import FiatOutcome from "./features/fiat/FiatOutcome";
 import FiatSavings from "./features/fiat/FiatSavings";
 import Projects from "./pages/Projects";
+import { EventsProvider } from "./features/projects/Calendar/events";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,24 +27,25 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <GlobalStyles />
-
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppLyout />}>
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="crypto" element={<Crypto />} />
-            <Route path="fiat" element={<Fiat />}>
-              <Route index element={<Navigate replace to="overview" />} />
-              <Route path="overview" element={<FiatOverview />} />
-              <Route path="income" element={<FiatIncome />} />
-              <Route path="outcome" element={<FiatOutcome />} />
-              <Route path="saved" element={<FiatSavings />} />
+      <EventsProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<AppLyout />}>
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="crypto" element={<Crypto />} />
+              <Route path="fiat" element={<Fiat />}>
+                <Route index element={<Navigate replace to="overview" />} />
+                <Route path="overview" element={<FiatOverview />} />
+                <Route path="income" element={<FiatIncome />} />
+                <Route path="outcome" element={<FiatOutcome />} />
+                <Route path="saved" element={<FiatSavings />} />
+              </Route>
+              <Route path="projects" element={<Projects />} />
             </Route>
-            <Route path="projects" element={<Projects />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </EventsProvider>
 
       <Toaster
         position="top-right"

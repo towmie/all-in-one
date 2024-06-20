@@ -46,3 +46,11 @@ export async function getProjectBg(name) {
     throw new Error(error.message);
   }
 }
+
+export function cc(...classes) {
+  return classes.filter((c) => typeof c === "string").join(" ");
+}
+
+export function formatDate(date, options = {}) {
+  return new Intl.DateTimeFormat(undefined, options).format(date);
+}
