@@ -85,7 +85,7 @@ function CryptoSummary({ cryptoData }) {
               <span>
                 {profitInUSD > 0
                   ? `+${formatCurrency(profitInUSD)}`
-                  : `-${formatCurrency(profitInUSD)}`}
+                  : `${formatCurrency(profitInUSD)}`}
               </span>
             </div>
           </div>

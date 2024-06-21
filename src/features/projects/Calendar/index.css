@@ -1,17 +1,10 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  font-family: sans-serif;
-}
-
 :root {
   --blue-background: hsl(200, 80%, 50%);
   --red-background: hsl(0, 75%, 60%);
   --green-background: hsl(150, 80%, 30%);
   --border-color: #dadce0;
   --border-size: 1px;
-  --day-padding: 0.25rem;
+  --day-padding: 0.5rem;
 }
 
 .calendar {
@@ -22,7 +15,7 @@
 }
 
 .header {
-  padding: 1rem;
+  padding: 1rem 0;
   width: 100%;
   display: flex;
   align-items: center;
@@ -143,7 +136,7 @@
 
 .old-month-day .events,
 .old-month-day .day-header {
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 .day-header {
@@ -162,17 +155,17 @@
 }
 
 .day-number {
-  font-size: 0.9rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  font-size: 1.25rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .day-number.today {
-  background-color: var(--blue-background);
-  border-radius: 50%;
+  background-color: var(--color-brand-700);
+  border-radius: 12px;
   color: white;
 }
 
@@ -187,8 +180,8 @@
   background: none;
   border: none;
   border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -200,7 +193,8 @@
 }
 
 .add-event-btn:hover {
-  background-color: #f1f3f4;
+  background-color: var(--color-brand-700);
+  color: #fff;
 }
 
 .event {

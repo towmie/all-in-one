@@ -1,5 +1,3 @@
-import { parse } from "date-fns";
-import { formatDate } from "../../../utils/utils";
 import EventModal from "./EventModal";
 import { useState } from "react";
 import { cc } from "../../../utils/utils";
