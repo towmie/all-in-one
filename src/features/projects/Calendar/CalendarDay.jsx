@@ -5,6 +5,7 @@ import CalendarEvents from "./CalendarEvents";
 import OverflowContainer from "./OverflowContainer";
 import ViewMoreCalendarEventsModal from "./ViewMoreCalendarEventsModal";
 import { cc, formatDate } from "../../../utils/utils";
+import Modal from "../../../ui/Modal";
 
 export default function CalendarDay({
   day,
@@ -35,58 +36,64 @@ export default function CalendarDay({
   }, [events]);
 
   return (
-    <div
-      className={cc(
-        "day",
-        !isSameMonth(day, selectedMonth) && "non-month-day",
-        isBefore(endOfDay(day), new Date()) && "old-month-day"
-      )}
-    >
-      <div className="day-header">
-        {showWeekName && (
-          <div className="week-name">
-            {formatDate(day, { weekday: "short" })}
-          </div>
+    <Modal>
+      <div
+        className={cc(
+          "day",
+          !isSameMonth(day, selectedMonth) && "non-month-day",
+          isBefore(endOfDay(day), new Date()) && "old-month-day"
         )}
-        <div className={cc("day-number", isToday(day) && "today")}>
-          {formatDate(day, { day: "numeric" })}
-        </div>
-        <button
-          className="add-event-btn"
-          onClick={() => setNewEventModalOpen(true)}
-        >
-          +
-        </button>
-      </div>
-      {sortedEvents.length > 0 && (
-        <OverflowContainer
-          items={sortedEvents}
-          getKey={(event) => event.id}
-          renderItem={(event) => <CalendarEvents event={event} />}
-          renderOverflow={(amount) => (
-            <>
-              <button
-                onClick={() => setViewMoreEventModalOpen(true)}
-                className="events-view-more-btn"
-              >
-                View {amount} More
-              </button>
-              <ViewMoreCalendarEventsModal
-                events={sortedEvents}
-                isOpen={isViewMoreEventModalOpen}
-                onClose={() => setViewMoreEventModalOpen(false)}
-              />
-            </>
+      >
+        <div className="day-header">
+          {showWeekName && (
+            <div className="week-name">
+              {formatDate(day, { weekday: "short" })}
+            </div>
           )}
-          className="events"
-        />
-      )}
-      <EventModal
-        date={day}
-        isOpen={isNewEventModalOpen}
-        onClose={() => setNewEventModalOpen(false)}
-        type="create"
-      />
-    </div>
+          <div className={cc("day-number", isToday(day) && "today")}>
+            {formatDate(day, { day: "numeric" })}
+          </div>
+          <Modal.Open opens="add-event-btn">
+            <button
+              className="add-event-btn"
+              onClick={() => setNewEventModalOpen(true)}
+            >
+              +
+            </button>
+          </Modal.Open>
+        </div>
+        {sortedEvents.length > 0 && (
+          <OverflowContainer
+            items={sortedEvents}
+            getKey={(event) => event.id}
+            renderItem={(event) => <CalendarEvents event={event} />}
+            renderOverflow={(amount) => (
+              <>
+                <button
+                  onClick={() => setViewMoreEventModalOpen(true)}
+                  className="events-view-more-btn"
+                >
+                  View {amount} More
+                </button>
+                <ViewMoreCalendarEventsModal
+                  events={sortedEvents}
+                  isOpen={isViewMoreEventModalOpen}
+                  onClose={() => setViewMoreEventModalOpen(false)}
+                />
+              </>
+            )}
+            className="events"
+          />
+        )}
+        <Modal.Window name="add-event-btn">
+          <EventModal
+            date={day}
+            isOpen={isNewEventModalOpen}
+            onClose={() => setNewEventModalOpen(false)}
+            type="create"
+          />
+        </Modal.Window>
+      </div>
+    </Modal>
   );
 }

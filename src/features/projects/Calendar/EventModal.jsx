@@ -1,21 +1,26 @@
 import { Fragment, useId, useRef, useState } from "react";
 import { formatDate } from "../../../utils/utils";
+import { useForm } from "react-hook-form";
 
-import Modal from "./Modal";
 import { EVENTS_COLOR } from "./useEvents";
 import Button from "../../../ui/Button";
 import { FaPlus } from "react-icons/fa";
 import { useCreateEvent } from "./useCreateEvent";
 import { useProjects } from "../useProjects";
 import Spinner from "../../../ui/Spinner";
+import Input from "../../../ui/Input";
+import FormRow from "../../../ui/FormRow";
+import FormRowVertical from "../../../ui/FormRowVertical";
+import Form from "../../../ui/Form";
+import styled from "styled-components";
 
-export default function EventModal({
-  type,
-  onDelete,
-  event,
-  date,
-  ...modalProps
-}) {
+const LabelStyled = styled.label`
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+`;
+
+export default function EventModal({ type, onDelete, event, date }) {
   const formId = useId();
   const [selectedColor, setSelectedColor] = useState(
     event?.color || EVENTS_COLOR[0]
@@ -30,9 +35,12 @@ export default function EventModal({
   const { createEvent, isPending } = useCreateEvent();
   const { projects, isLoadingprojects } = useProjects();
 
+  const { register, handleSubmit, reset, formState } = useForm();
+  const { errors } = formState;
+
   const isWorking = isLoadingprojects || isPending;
 
-  function handleSubmit(e) {
+  function onHandleSubmit(e) {
     e.preventDefault();
     if (date) console.log(date, event);
 
@@ -66,7 +74,6 @@ export default function EventModal({
       }
       newEvent = { ...commonProps, allDay: false, startTime, endTime };
     }
-    modalProps.onClose();
 
     if (type === "create") createEvent(newEvent);
   }
@@ -74,35 +81,43 @@ export default function EventModal({
   if (isWorking) return <Spinner />;
 
   return (
-    <Modal {...modalProps}>
+    <div style={{ width: "100%" }}>
       <div className="modal-title">
         <div>{isNew ? "Add" : "Edit"} Event</div>
         <small>{formatDate(date, { dateStyle: "short" })}</small>
-        <button className="close-btn" onClick={modalProps.onClose}>
-          &times;
-        </button>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor={`${formId}-title`}>Title</label>
-          <input
+      <Form onSubmit={handleSubmit(onHandleSubmit)}>
+        <FormRowVertical label="Title" error={errors?.title?.message}>
+          <Input
             defaultValue={event?.title}
-            ref={nameRef}
             type="text"
             name="title"
+            {...register("title", { required: "This field is required" })}
             id={`${formId}-title`}
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor={`${formId}-title`}>Description</label>
+        </FormRowVertical>
+        <FormRowVertical
+          label="Description"
+          error={errors?.description?.message}
+        >
+          <textarea
+            defaultValue={event?.description}
+            type="text"
+            name="description"
+            {...register("description", { required: "This field is required" })}
+            id={`${formId}-description`}
+          />
+        </FormRowVertical>
+        {/* <div className="form-group">
+          <label htmlFor={`${formId}-description`}>Description</label>
           <textarea
             defaultValue={event?.description}
             ref={descriptionRef}
             name="description"
             id={`${formId}-description`}
           />
-        </div>
-        <div className="form-group">
+        </div> */}
+        {/* <div className="form-group">
           <select name="project" id="project" ref={projectIdRef}>
             {projects?.map((project) => (
               <option key={project.id} value={project.id}>
@@ -110,21 +125,34 @@ export default function EventModal({
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
-        <div className="form-group checkbox">
+        <FormRowVertical label="Projects" error={errors?.allDay?.message}>
+          <select name="project" id="project" {...register("project")}>
+            {projects?.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.projectName}
+              </option>
+            ))}
+          </select>
+        </FormRowVertical>
+
+        <FormRow label="All day" error={errors?.allDay?.message}>
           <input
             checked={isAlldayChecked}
             onChange={(e) => setAlldayChecked(e.target.checked)}
             type="checkbox"
             name="all-day"
             id={`${formId}-all-day`}
+            {...register("allDay")}
           />
-          <label htmlFor={`${formId}-all-day`}>All Day?</label>
-        </div>
+        </FormRow>
+
         <div className="row">
           <div className="form-group">
-            <label htmlFor={`${formId}-start-time`}>Start Time</label>
+            <LabelStyled htmlFor={`${formId}-start-time`}>
+              Start Time
+            </LabelStyled>
             <input
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
@@ -133,10 +161,12 @@ export default function EventModal({
               type="time"
               name="start-time"
               id={`${formId}-start-time`}
+              {...register("startTime")}
             />
           </div>
+
           <div className="form-group">
-            <label htmlFor={`${formId}-end-time`}>End Time</label>
+            <LabelStyled htmlFor={`${formId}-end-time`}>End Time</LabelStyled>
             <input
               ref={endTimeRef}
               defaultValue={event?.endTime}
@@ -146,11 +176,12 @@ export default function EventModal({
               type="time"
               name="end-time"
               id={`${formId}-end-time`}
+              {...register("endTime")}
             />
           </div>
         </div>
         <div className="form-group">
-          <label>Color</label>
+          <LabelStyled>Color</LabelStyled>
           <div className="row left">
             {EVENTS_COLOR.map((color) => (
               <Fragment key={color}>
@@ -162,6 +193,7 @@ export default function EventModal({
                   checked={selectedColor === color}
                   onChange={() => setSelectedColor(color)}
                   className="color-radio"
+                  {...register("color")}
                 />
                 <label htmlFor={`${formId}-${color}`}>
                   <span className="sr-only">{color}</span>
@@ -187,7 +219,7 @@ export default function EventModal({
             </Button>
           )}
         </div>
-      </form>
-    </Modal>
+      </Form>
+    </div>
   );
 }
