@@ -40,42 +40,42 @@ export default function EventModal({ type, onDelete, event, date }) {
 
   const isWorking = isLoadingprojects || isPending;
 
-  function onHandleSubmit(e) {
-    e.preventDefault();
-    if (date) console.log(date, event);
+  function onHandleSubmit(data) {
+    console.log(data);
+    // if (date) console.log(date, event);
 
-    const title = nameRef.current?.value;
-    const endTime = endTimeRef.current?.value;
-    const description = descriptionRef.current?.value;
-    const projectId = +projectIdRef.current?.value;
+    // const title = nameRef.current?.value;
+    // const endTime = endTimeRef.current?.value;
+    // const description = descriptionRef.current?.value;
+    // const projectId = +projectIdRef.current?.value;
 
-    if (title === "" || title == null) return;
+    // if (title === "" || title == null) return;
 
-    const commonProps = {
-      title,
-      description,
-      projectId,
-      date: date || event?.date,
-      color: selectedColor,
-    };
+    // const commonProps = {
+    //   title,
+    //   description,
+    //   projectId,
+    //   date: date || event?.date,
+    //   color: selectedColor,
+    // };
 
-    let newEvent;
+    // let newEvent;
 
-    if (isAlldayChecked) {
-      newEvent = { ...commonProps, allDay: true, startTime: "", endTime: "" };
-    } else {
-      if (
-        startTime == null ||
-        startTime === "" ||
-        endTime == null ||
-        endTime === ""
-      ) {
-        return;
-      }
-      newEvent = { ...commonProps, allDay: false, startTime, endTime };
-    }
+    // if (isAlldayChecked) {
+    //   newEvent = { ...commonProps, allDay: true, startTime: "", endTime: "" };
+    // } else {
+    //   if (
+    //     startTime == null ||
+    //     startTime === "" ||
+    //     endTime == null ||
+    //     endTime === ""
+    //   ) {
+    //     return;
+    //   }
+    //   newEvent = { ...commonProps, allDay: false, startTime, endTime };
+    // }
 
-    if (type === "create") createEvent(newEvent);
+    // if (type === "create") createEvent(newEvent);
   }
 
   if (isWorking) return <Spinner />;
