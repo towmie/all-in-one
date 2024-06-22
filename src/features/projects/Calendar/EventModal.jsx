@@ -183,6 +183,7 @@ export default function EventModal({ event, date, onCloseModal }) {
               size="medium"
               variation="danger"
               disabled={isDeleteing}
+              type="button"
             >
               <span> Delete</span>
             </Button>
