@@ -50,6 +50,8 @@ export default function EventModal({ event, date, onCloseModal }) {
       description,
       allDay: Boolean(allDay),
       projectId: +projectId,
+      projectName: projects.find((project) => project.id === +projectId)
+        .projectName,
       date: date || event?.date,
       color: "blue",
     };
