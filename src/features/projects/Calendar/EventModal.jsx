@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { formatDate, formatTimeForSupabase } from "../../../utils/utils";
 import { useForm } from "react-hook-form";
 
@@ -15,6 +14,7 @@ import styled from "styled-components";
 import Textarea from "../../../ui/Textarea";
 import { StyledSelect } from "../../../ui/Select";
 import { useDeleteEvent } from "./useDeleteEvent";
+import { useEditEvent } from "./useEditEvent";
 
 const LabelStyled = styled.label`
   font-weight: 500;
@@ -22,20 +22,20 @@ const LabelStyled = styled.label`
   font-size: 1.4rem;
 `;
 
-export default function EventModal({ type, event, date, onCloseModal }) {
-  const formId = useId();
+export default function EventModal({ event, date, onCloseModal }) {
   const isNew = event === undefined;
 
   const { createEvent, isPending } = useCreateEvent();
   const { projects, isLoadingprojects } = useProjects();
   const { deleteEvent, isDeleteing } = useDeleteEvent();
+  const { editEvent, isEditing } = useEditEvent();
 
   const { register, handleSubmit, reset, watch, formState } = useForm();
   const { errors } = formState;
   const isAllDayChecked = Boolean(watch("allDay"));
   const startTimeRef = watch("startTime");
 
-  const isWorking = isLoadingprojects || isPending;
+  const isWorking = isLoadingprojects || isPending || isEditing;
 
   function onHandleSubmit({
     title,
@@ -64,13 +64,24 @@ export default function EventModal({ type, event, date, onCloseModal }) {
         endTime: formatTimeForSupabase(endTime),
       };
     }
-    if (type === "create")
+    if (isNew) {
       createEvent(newEvent, {
         onSuccess: () => {
           reset();
           onCloseModal?.();
         },
       });
+    } else {
+      editEvent(
+        { event: { ...newEvent }, id: event.id },
+        {
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
+        }
+      );
+    }
   }
 
   if (isWorking) return <Spinner />;
@@ -88,9 +99,10 @@ export default function EventModal({ type, event, date, onCloseModal }) {
             type="text"
             name="title"
             {...register("title", { required: "This field is required" })}
-            id={`${formId}-title`}
+            id="title"
           />
         </FormRowVertical>
+
         <FormRowVertical
           label="Description"
           error={errors?.description?.message}
@@ -100,7 +112,7 @@ export default function EventModal({ type, event, date, onCloseModal }) {
             type="text"
             name="description"
             {...register("description", { required: "This field is required" })}
-            id={`${formId}-description`}
+            id="description"
           />
         </FormRowVertical>
 
@@ -121,7 +133,7 @@ export default function EventModal({ type, event, date, onCloseModal }) {
 
         <FormRow label="All day" error={errors?.allDay?.message}>
           <Input
-            checked={event?.allDay || isAllDayChecked}
+            defaultChecked={event?.allDay}
             type="checkbox"
             name="all-day"
             id="allDay"
@@ -131,13 +143,11 @@ export default function EventModal({ type, event, date, onCloseModal }) {
 
         <div className="row">
           <div className="form-group">
-            <LabelStyled htmlFor={`${formId}-start-time`}>
-              Start Time
-            </LabelStyled>
+            <LabelStyled htmlFor="startTime">Start Time</LabelStyled>
             <Input
               defaultValue={event?.startTime}
               required={!isAllDayChecked}
-              disabled={event?.allDay || isAllDayChecked}
+              disabled={isAllDayChecked}
               type="time"
               name="start-time"
               id="startTime"
@@ -146,13 +156,13 @@ export default function EventModal({ type, event, date, onCloseModal }) {
           </div>
 
           <div className="form-group">
-            <LabelStyled htmlFor={`${formId}-end-time`}>End Time</LabelStyled>
+            <LabelStyled htmlFor="endTime">End Time</LabelStyled>
 
             <Input
               defaultValue={event?.endTime}
               min={startTimeRef}
               required={!event?.allDay}
-              disabled={event?.allDay || isAllDayChecked}
+              disabled={isAllDayChecked}
               type="time"
               name="end-time"
               id="endTime"
@@ -162,12 +172,12 @@ export default function EventModal({ type, event, date, onCloseModal }) {
         </div>
 
         <div className="row">
-          <Button size="medium" variations="link">
+          <Button size="medium" variations="link" type="submit">
             <FaPlus />
             <span> {isNew ? " Add" : " Edit"}</span>
           </Button>
 
-          {type === "edit" && (
+          {!isNew && (
             <Button
               onClick={() => deleteEvent(event.id)}
               size="medium"

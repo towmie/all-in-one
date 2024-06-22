@@ -13,7 +13,6 @@ export default function CalendarDay({
   selectedMonth,
   events,
 }) {
-  const [isNewEventModalOpen, setNewEventModalOpen] = useState(false);
   const [isViewMoreEventModalOpen, setViewMoreEventModalOpen] = useState(false);
 
   const sortedEvents = useMemo(() => {
@@ -54,12 +53,7 @@ export default function CalendarDay({
             {formatDate(day, { day: "numeric" })}
           </div>
           <Modal.Open opens="add-event-btn">
-            <button
-              className="add-event-btn"
-              onClick={() => setNewEventModalOpen(true)}
-            >
-              +
-            </button>
+            <button className="add-event-btn">+</button>
           </Modal.Open>
         </div>
         {sortedEvents.length > 0 && (
@@ -86,12 +80,7 @@ export default function CalendarDay({
           />
         )}
         <Modal.Window name="add-event-btn">
-          <EventModal
-            date={day}
-            isOpen={isNewEventModalOpen}
-            onClose={() => setNewEventModalOpen(false)}
-            type="create"
-          />
+          <EventModal date={day} />
         </Modal.Window>
       </div>
     </Modal>

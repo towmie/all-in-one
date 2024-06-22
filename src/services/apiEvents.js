@@ -29,3 +29,18 @@ export async function deleteEvent(id) {
 
   return data;
 }
+
+export async function editEvent({ event, id }) {
+  const { data, error } = await supabase
+    .from("events")
+    .update({ ...event })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Event couldn't be deleted");
+  }
+
+  return data;
+}
