@@ -10,6 +10,7 @@ export function useDeleteEvent() {
     onSuccess: () => {
       toast.success("Event successfully deleted");
       queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["filteredEvents"] });
     },
     onError: (err) => toast.error(err.message),
   });

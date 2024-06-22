@@ -1,8 +1,12 @@
-import { FaTasks } from "react-icons/fa";
-
 import FilterTab from "../../ui/FliterTab";
+import Spinner from "../../ui/Spinner";
+import { useFilteredEvents } from "./Calendar/useFilteredEvents";
 
 function Todos() {
+  const { filteredEvents, isLoadingFilteredEvents } = useFilteredEvents();
+
+  if (isLoadingFilteredEvents) return <Spinner />;
+
   return (
     <div>
       <div>
@@ -17,7 +21,13 @@ function Todos() {
         />
       </div>
       <div>
-        <ul></ul>
+        <ul>
+          {filteredEvents.map((event) => (
+            <li key={event.id}>
+              {event.title} - {event.date}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -1,7 +1,27 @@
+import { getToday } from "../utils/utils";
 import supabase from "./supabase";
 
+export async function getFilteredEvents({ filterDate }) {
+  let query = supabase.from("events").select("*").order("date", {
+    ascending: false,
+  });
+
+  if (filterDate.label === "today") {
+    query = query.eq("date", filterDate.value);
+  } else if (filterDate.label === "tomorrow" || filterDate.label === "week") {
+    query = query
+      .gte("date", filterDate.value)
+      .lte("date", getToday({ end: true }));
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  return data;
+}
 export async function getEvents() {
-  const { data, error } = await supabase.from("events").select();
+  const { data, error } = await supabase.from("events").select("*");
 
   if (error) throw error;
 

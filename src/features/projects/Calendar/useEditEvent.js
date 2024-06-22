@@ -10,6 +10,7 @@ export function useEditEvent() {
     onSuccess: () => {
       toast.success("Event successfully edited");
       queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["filteredEvents"] });
     },
     onError: (err) => toast.error(err.message),
   });

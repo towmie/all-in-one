@@ -9,6 +9,7 @@ export function useCreateEvent() {
     mutationFn: (event) => createEventApi(event),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["filteredEvents"] });
     },
     onError: (error) => {
       toast.error(error.message);

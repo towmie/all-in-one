@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getEvents } from "../../../services/apiEvents";
+
 export const EVENTS_COLOR = ["red", "green", "blue"];
 
 export function useEvents() {
