@@ -13,6 +13,8 @@ import FormRow from "../../../ui/FormRow";
 import FormRowVertical from "../../../ui/FormRowVertical";
 import Form from "../../../ui/Form";
 import styled from "styled-components";
+import Textarea from "../../../ui/Textarea";
+import { StyledSelect } from "../../../ui/Select";
 
 const LabelStyled = styled.label`
   font-weight: 500;
@@ -26,31 +28,26 @@ export default function EventModal({ type, onDelete, event, date }) {
     event?.color || EVENTS_COLOR[0]
   );
   const isNew = event === undefined;
-  const [isAlldayChecked, setAlldayChecked] = useState(event?.allDay || false);
+
   const [startTime, setStartTime] = useState(event?.startTime || "");
-  const endTimeRef = useRef();
-  const nameRef = useRef();
-  const descriptionRef = useRef();
-  const projectIdRef = useRef();
+
   const { createEvent, isPending } = useCreateEvent();
   const { projects, isLoadingprojects } = useProjects();
+  const [projectId, setProjectId] = useState(
+    event?.projectId || projects[0]?.id
+  );
 
-  const { register, handleSubmit, reset, formState } = useForm();
+  const { register, handleSubmit, reset, watch, formState } = useForm();
   const { errors } = formState;
+  const isAllDayChecked = watch("allDay");
+  const startTimeRef = watch("startTime");
 
   const isWorking = isLoadingprojects || isPending;
 
   function onHandleSubmit(data) {
     console.log(data);
     // if (date) console.log(date, event);
-
-    // const title = nameRef.current?.value;
-    // const endTime = endTimeRef.current?.value;
-    // const description = descriptionRef.current?.value;
-    // const projectId = +projectIdRef.current?.value;
-
     // if (title === "" || title == null) return;
-
     // const commonProps = {
     //   title,
     //   description,
@@ -58,10 +55,8 @@ export default function EventModal({ type, onDelete, event, date }) {
     //   date: date || event?.date,
     //   color: selectedColor,
     // };
-
     // let newEvent;
-
-    // if (isAlldayChecked) {
+    // if (isAllDayChecked) {
     //   newEvent = { ...commonProps, allDay: true, startTime: "", endTime: "" };
     // } else {
     //   if (
@@ -74,7 +69,6 @@ export default function EventModal({ type, onDelete, event, date }) {
     //   }
     //   newEvent = { ...commonProps, allDay: false, startTime, endTime };
     // }
-
     // if (type === "create") createEvent(newEvent);
   }
 
@@ -100,7 +94,7 @@ export default function EventModal({ type, onDelete, event, date }) {
           label="Description"
           error={errors?.description?.message}
         >
-          <textarea
+          <Textarea
             defaultValue={event?.description}
             type="text"
             name="description"
@@ -108,42 +102,28 @@ export default function EventModal({ type, onDelete, event, date }) {
             id={`${formId}-description`}
           />
         </FormRowVertical>
-        {/* <div className="form-group">
-          <label htmlFor={`${formId}-description`}>Description</label>
-          <textarea
-            defaultValue={event?.description}
-            ref={descriptionRef}
-            name="description"
-            id={`${formId}-description`}
-          />
-        </div> */}
-        {/* <div className="form-group">
-          <select name="project" id="project" ref={projectIdRef}>
-            {projects?.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.projectName}
-              </option>
-            ))}
-          </select>
-        </div> */}
 
         <FormRowVertical label="Projects" error={errors?.allDay?.message}>
-          <select name="project" id="project" {...register("project")}>
+          <StyledSelect
+            name="project"
+            id="projectId"
+            defaultValue={event?.projectId}
+            {...register("projectId")}
+          >
             {projects?.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.projectName}
               </option>
             ))}
-          </select>
+          </StyledSelect>
         </FormRowVertical>
 
         <FormRow label="All day" error={errors?.allDay?.message}>
-          <input
-            checked={isAlldayChecked}
-            onChange={(e) => setAlldayChecked(e.target.checked)}
+          <Input
+            defaultValue={event?.allDay || isAllDayChecked}
             type="checkbox"
             name="all-day"
-            id={`${formId}-all-day`}
+            id="allDay"
             {...register("allDay")}
           />
         </FormRow>
@@ -153,34 +133,33 @@ export default function EventModal({ type, onDelete, event, date }) {
             <LabelStyled htmlFor={`${formId}-start-time`}>
               Start Time
             </LabelStyled>
-            <input
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required={!isAlldayChecked}
-              disabled={isAlldayChecked}
+            <Input
+              defaultValue={event?.startTime}
+              required={!isAllDayChecked}
+              disabled={event?.allDay || isAllDayChecked}
               type="time"
               name="start-time"
-              id={`${formId}-start-time`}
+              id="startTime"
               {...register("startTime")}
             />
           </div>
 
           <div className="form-group">
             <LabelStyled htmlFor={`${formId}-end-time`}>End Time</LabelStyled>
-            <input
-              ref={endTimeRef}
+
+            <Input
               defaultValue={event?.endTime}
-              min={startTime}
-              required={!isAlldayChecked}
-              disabled={isAlldayChecked}
+              min={startTimeRef}
+              required={!event?.allDay}
+              disabled={event?.allDay || isAllDayChecked}
               type="time"
               name="end-time"
-              id={`${formId}-end-time`}
+              id="endTime"
               {...register("endTime")}
             />
           </div>
         </div>
-        <div className="form-group">
+        {/*   <div className="form-group">
           <LabelStyled>Color</LabelStyled>
           <div className="row left">
             {EVENTS_COLOR.map((color) => (
@@ -201,19 +180,13 @@ export default function EventModal({ type, onDelete, event, date }) {
               </Fragment>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="row">
-          {/* <button className="btn btn-success" type="submit">
-            {isNew ? "Add" : "Edit"}
-          </button> */}
           <Button size="medium" variations="link">
             <FaPlus />
             <span> {isNew ? " Add" : " Edit"}</span>
           </Button>
           {onDelete !== null && (
-            // <button onClick={onDelete} className="btn btn-delete" type="button">
-            //   Delete
-            // </button>
             <Button onClick={onDelete} size="medium" variation="danger">
               <span> Delete</span>
             </Button>
