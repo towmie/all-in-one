@@ -156,8 +156,7 @@
 
 .day-number {
   font-size: 1.25rem;
-  width: 2rem;
-  height: 2rem;
+  padding: 2px 6px;
   display: flex;
   justify-content: center;
   align-items: center;

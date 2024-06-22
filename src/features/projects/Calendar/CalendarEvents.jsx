@@ -13,7 +13,6 @@ export default function CalendarEvents({ event }) {
       <Modal>
         <Modal.Open opens="edit-event-btn">
           <button
-            onClick={() => setEditModalOpen(true)}
             className={cc(
               "event",
               event.color,
@@ -35,7 +34,8 @@ export default function CalendarEvents({ event }) {
           <EventModal
             event={event}
             isOpen={isEditModalOpen}
-            onClose={() => setEditModalOpen(false)}
+            type="edit"
+            // onClose={() => setEditModalOpen(false)}
             // onSubmit={(e) => updateEvent(e, event.id)}
             // onDelete={() => deleteEvent(event.id)}
           />

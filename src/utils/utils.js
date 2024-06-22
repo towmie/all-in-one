@@ -54,3 +54,14 @@ export function cc(...classes) {
 export function formatDate(date, options = {}) {
   return new Intl.DateTimeFormat(undefined, options).format(date);
 }
+
+export function formatTimeForSupabase(time) {
+  const parts = time.split(":");
+  if (parts.length === 2) {
+    // If time is in "HH:MM" format, add ":00" to make it "HH:MM:SS"
+    return `${time}:00`;
+  }
+  // If time is already in "HH:MM:SS" or any other format, return it as is
+  // You might want to add more checks or conversions depending on your input format
+  return time;
+}

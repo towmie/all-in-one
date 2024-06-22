@@ -1,8 +1,7 @@
-import { Fragment, useId, useRef, useState } from "react";
-import { formatDate } from "../../../utils/utils";
+import { useId } from "react";
+import { formatDate, formatTimeForSupabase } from "../../../utils/utils";
 import { useForm } from "react-hook-form";
 
-import { EVENTS_COLOR } from "./useEvents";
 import Button from "../../../ui/Button";
 import { FaPlus } from "react-icons/fa";
 import { useCreateEvent } from "./useCreateEvent";
@@ -15,6 +14,7 @@ import Form from "../../../ui/Form";
 import styled from "styled-components";
 import Textarea from "../../../ui/Textarea";
 import { StyledSelect } from "../../../ui/Select";
+import { useDeleteEvent } from "./useDeleteEvent";
 
 const LabelStyled = styled.label`
   font-weight: 500;
@@ -22,54 +22,55 @@ const LabelStyled = styled.label`
   font-size: 1.4rem;
 `;
 
-export default function EventModal({ type, onDelete, event, date }) {
+export default function EventModal({ type, event, date, onCloseModal }) {
   const formId = useId();
-  const [selectedColor, setSelectedColor] = useState(
-    event?.color || EVENTS_COLOR[0]
-  );
   const isNew = event === undefined;
-
-  const [startTime, setStartTime] = useState(event?.startTime || "");
 
   const { createEvent, isPending } = useCreateEvent();
   const { projects, isLoadingprojects } = useProjects();
-  const [projectId, setProjectId] = useState(
-    event?.projectId || projects[0]?.id
-  );
+  const { deleteEvent, isDeleteing } = useDeleteEvent();
 
   const { register, handleSubmit, reset, watch, formState } = useForm();
   const { errors } = formState;
-  const isAllDayChecked = watch("allDay");
+  const isAllDayChecked = Boolean(watch("allDay"));
   const startTimeRef = watch("startTime");
 
   const isWorking = isLoadingprojects || isPending;
 
-  function onHandleSubmit(data) {
-    console.log(data);
-    // if (date) console.log(date, event);
-    // if (title === "" || title == null) return;
-    // const commonProps = {
-    //   title,
-    //   description,
-    //   projectId,
-    //   date: date || event?.date,
-    //   color: selectedColor,
-    // };
-    // let newEvent;
-    // if (isAllDayChecked) {
-    //   newEvent = { ...commonProps, allDay: true, startTime: "", endTime: "" };
-    // } else {
-    //   if (
-    //     startTime == null ||
-    //     startTime === "" ||
-    //     endTime == null ||
-    //     endTime === ""
-    //   ) {
-    //     return;
-    //   }
-    //   newEvent = { ...commonProps, allDay: false, startTime, endTime };
-    // }
-    // if (type === "create") createEvent(newEvent);
+  function onHandleSubmit({
+    title,
+    description,
+    projectId,
+    allDay,
+    startTime,
+    endTime,
+  }) {
+    const commonProps = {
+      title,
+      description,
+      allDay: Boolean(allDay),
+      projectId: +projectId,
+      date: date || event?.date,
+      color: "blue",
+    };
+
+    let newEvent;
+    if (allDay) {
+      newEvent = { ...commonProps, startTime: "00:00:00", endTime: "00:00:00" };
+    } else {
+      newEvent = {
+        ...commonProps,
+        startTime: formatTimeForSupabase(startTime),
+        endTime: formatTimeForSupabase(endTime),
+      };
+    }
+    if (type === "create")
+      createEvent(newEvent, {
+        onSuccess: () => {
+          reset();
+          onCloseModal?.();
+        },
+      });
   }
 
   if (isWorking) return <Spinner />;
@@ -120,7 +121,7 @@ export default function EventModal({ type, onDelete, event, date }) {
 
         <FormRow label="All day" error={errors?.allDay?.message}>
           <Input
-            defaultValue={event?.allDay || isAllDayChecked}
+            checked={event?.allDay || isAllDayChecked}
             type="checkbox"
             name="all-day"
             id="allDay"
@@ -159,35 +160,20 @@ export default function EventModal({ type, onDelete, event, date }) {
             />
           </div>
         </div>
-        {/*   <div className="form-group">
-          <LabelStyled>Color</LabelStyled>
-          <div className="row left">
-            {EVENTS_COLOR.map((color) => (
-              <Fragment key={color}>
-                <input
-                  type="radio"
-                  name="color"
-                  value={color}
-                  id={`${formId}-${color}`}
-                  checked={selectedColor === color}
-                  onChange={() => setSelectedColor(color)}
-                  className="color-radio"
-                  {...register("color")}
-                />
-                <label htmlFor={`${formId}-${color}`}>
-                  <span className="sr-only">{color}</span>
-                </label>
-              </Fragment>
-            ))}
-          </div>
-        </div> */}
+
         <div className="row">
           <Button size="medium" variations="link">
             <FaPlus />
             <span> {isNew ? " Add" : " Edit"}</span>
           </Button>
-          {onDelete !== null && (
-            <Button onClick={onDelete} size="medium" variation="danger">
+
+          {type === "edit" && (
+            <Button
+              onClick={() => deleteEvent(event.id)}
+              size="medium"
+              variation="danger"
+              disabled={isDeleteing}
+            >
               <span> Delete</span>
             </Button>
           )}
