@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 const EventsList = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-top: 2.4rem;
 `;
 
 function Todos() {
@@ -30,9 +30,7 @@ function Todos() {
 
   return (
     <div>
-      <div>
-        <FilterTab filterField="events" options={filterOptions} />
-      </div>
+      <FilterTab filterField="events" options={filterOptions} />
       <div>
         {filteredEvents.length > 0 ? (
           <EventsList>
@@ -41,7 +39,9 @@ function Todos() {
             ))}
           </EventsList>
         ) : (
-          <div>No events for {currentFilterValue.toLowerCase()}</div>
+          <EventsList>
+            No events for {currentFilterValue.toLowerCase()}
+          </EventsList>
         )}
       </div>
     </div>
